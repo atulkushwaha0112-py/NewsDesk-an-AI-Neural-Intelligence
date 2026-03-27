@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tracking – NewsDesk</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#09090f;--surface:#111118;--surface2:#18181f;--border:#1f1f2e;--border2:#2a2a3a;
+  --accent:#f97316;--accent2:#fb923c;--accentlow:rgba(249,115,22,.12);
+  --text:#f0eff0;--text2:#a1a1b5;--text3:#4a4a62;
+  --liked:#22c55e;--likedlow:rgba(34,197,94,.1);
+  --danger:#ef4444;--dangerlow:rgba(239,68,68,.1);
+}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh}
+
+.topbar{height:54px;background:var(--surface);border-bottom:1px solid var(--border);
+display:flex;align-items:center;padding:0 1.25rem;gap:.75rem}
+.brand{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:800;letter-spacing:-.02em;text-decoration:none;color:var(--text)}
+.brand span{color:var(--accent)}
+.back-btn{display:flex;align-items:center;gap:.3rem;color:var(--text2);font-size:.85rem;
+cursor:pointer;background:none;border:1px solid var(--border);border-radius:7px;padding:.35rem .7rem;
+transition:all .15s;text-decoration:none}
+.back-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+.container{max-width:700px;margin:0 auto;padding:2rem 1.25rem 4rem}
+.page-title{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:.4rem}
+.page-sub{font-size:.85rem;color:var(--text3);margin-bottom:1.5rem}
+
+/* Tracked topic cards */
+.track-card{background:var(--surface);border:1px solid var(--border);border-radius:11px;
+padding:1rem;margin-bottom:.75rem;display:flex;align-items:center;gap:1rem;
+transition:border-color .2s;cursor:pointer}
+.track-card:hover{border-color:var(--border2)}
+.track-icon{font-size:1.5rem;flex-shrink:0}
+.track-info{flex:1;min-width:0}
+.track-title{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;line-height:1.35;
+margin-bottom:.25rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.track-meta{font-size:.73rem;color:var(--text3);display:flex;gap:.7rem;flex-wrap:wrap}
+.track-badge{font-size:.65rem;padding:.15rem .45rem;border-radius:999px;
+background:var(--accentlow);color:var(--accent2);font-weight:600}
+.track-actions{display:flex;gap:.4rem;flex-shrink:0}
+.track-btn{padding:.35rem .65rem;border:1px solid var(--border);border-radius:7px;
+background:none;color:var(--text2);font-size:.78rem;cursor:pointer;transition:all .15s}
+.track-btn:hover{border-color:var(--accent);color:var(--accent)}
+.track-btn.danger:hover{border-color:var(--danger);color:var(--danger)}
+
+/* Empty */
+.empty-state{text-align:center;padding:3rem 1rem;color:var(--text3)}
+.empty-state .icon{font-size:2.5rem;margin-bottom:.75rem}
+.empty-state h3{font-family:'Syne',sans-serif;color:var(--text2);margin-bottom:.4rem;font-size:1rem}
+.empty-state p{font-size:.85rem}
+.empty-state a{color:var(--accent)}
+
+/* Toast */
+.toast{position:fixed;bottom:1.25rem;right:1.25rem;background:var(--surface2);border:1px solid var(--border2);
+border-radius:9px;padding:.65rem .9rem;font-size:.82rem;color:var(--text);z-index:999;
+transform:translateY(6px);opacity:0;transition:all .25s;max-width:280px;box-shadow:0 8px 20px rgba(0,0,0,.4)}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.ok{border-color:rgba(34,197,94,.4)}.toast.err{border-color:rgba(239,68,68,.4)}
+
+.loading{text-align:center;color:var(--text3);padding:2rem;font-size:.85rem}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="/dashboard/" class="brand">News<span>Desk</span></a>
+  <a href="/dashboard/" class="back-btn">← Dashboard</a>
+</div>
+
+<div class="container">
+  <div class="page-title">📌 Tracked News</div>
+  <div class="page-sub">News topics you're following. Click any topic to see its timeline.</div>
+
+  <div id="loading" class="loading">Loading tracked topics…</div>
+  <div id="trackList"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const token = localStorage.getItem('access_token');
+if(!token) window.location.href = '/auth/login';
+
+async function loadTracked(){
+  try{
+    const r = await fetch('/tracking/list', {
+      headers: {'Authorization': `Bearer ${token}`}
+    });
+    const d = await r.json();
+    document.getElementById('loading').style.display = 'none';
+    renderList(d.tracked_topics || []);
+  } catch(e){
+    document.getElementById('loading').textContent = 'Failed to load.';
+  }
+}
+
+function renderList(topics){
+  const el = document.getElementById('trackList');
+
+  if(!topics.length){
+    el.innerHTML = `<div class="empty-state">
+      <div class="icon">📡</div>
+      <h3>No tracked topics yet</h3>
+      <p>Open any news article and click "Track" to start following a topic.<br>
+      <a href="/dashboard/">← Go to Dashboard</a></p>
+    </div>`;
+    return;
+  }
+
+  let html = '';
+  topics.forEach((t, idx) => {
+    const time = fmtTime(t.tracked_at);
+    const related = t.related_count ? `${t.related_count} related` : 'New';
+    html += `
+    <div class="track-card" data-idx="${idx}">
+      <div class="track-icon">📌</div>
+      <div class="track-info">
+        <div class="track-title">${esc(t.title)}</div>
+        <div class="track-meta">
+          <span>Tracked ${time}</span>
+          <span class="track-badge">${related}</span>
+        </div>
+      </div>
+      <div class="track-actions">
+        <button class="track-btn" data-viewidx="${idx}">View Timeline →</button>
+        <button class="track-btn danger" data-delidx="${idx}">✕</button>
+      </div>
+    </div>`;
+  });
+  el.innerHTML = html;
+
+  // Attach click handlers
+  el.querySelectorAll('.track-card[data-idx]').forEach(card => {
+    card.addEventListener('click', e => {
+      if(e.target.closest('.track-actions')) return;
+      const i = parseInt(card.dataset.idx);
+      goTimeline(topics[i]);
+    });
+  });
+  el.querySelectorAll('.track-btn[data-viewidx]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const i = parseInt(btn.dataset.viewidx);
+      goTimeline(topics[i]);
+    });
+  });
+  el.querySelectorAll('.track-btn[data-delidx]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const i = parseInt(btn.dataset.delidx);
+      removeTrack(topics[i].news_id, btn.closest('.track-card'));
+    });
+  });
+}
+
+function goTimeline(topic){
+  sessionStorage.setItem('track_topic', JSON.stringify(topic));
+  window.location.href = `/tracking/timeline/${encodeURIComponent(topic.news_id)}`;
+}
+
+async function removeTrack(newsId, cardEl){
+  if(!confirm('Stop tracking this topic?')) return;
+  try{
+    const r = await fetch(`/tracking/remove/${encodeURIComponent(newsId)}`, {
+      method: 'DELETE',
+      headers: {'Authorization': `Bearer ${token}`}
+    });
+    if(r.ok){
+      cardEl.style.opacity = '0';
+      cardEl.style.transform = 'translateX(20px)';
+      cardEl.style.transition = 'all .3s';
+      setTimeout(() => { cardEl.remove(); showToast('Tracking removed', 'ok'); }, 300);
+    } else {
+      showToast('Failed to remove', 'err');
+    }
+  } catch(e){ showToast('Network error', 'err'); }
+}
+
+function fmtTime(s){
+  if(!s) return '';
+  try{
+    const d = new Date(s), now = new Date(), diff = (now - d) / 1000;
+    if(diff < 60) return 'just now';
+    if(diff < 3600) return `${Math.floor(diff/60)}m ago`;
+    if(diff < 86400) return `${Math.floor(diff/3600)}h ago`;
+    return d.toLocaleDateString('en-IN', {day:'numeric', month:'short'});
+  } catch{ return ''; }
+}
+function esc(s){
+  if(typeof s !== 'string') return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+let toastT = null;
+function showToast(msg, type='ok'){
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.className = `toast show ${type}`;
+  clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+loadTracked();
+</script>
+</body>
+</html>

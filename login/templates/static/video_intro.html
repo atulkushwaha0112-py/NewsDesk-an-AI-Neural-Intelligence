@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Economic Times</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: #0A0A0B;
+    overflow: hidden;
+    font-family: 'Georgia', serif;
+    cursor: none;
+  }
+
+  /* ── CUSTOM CURSOR ── */
+  .cursor {
+    position: fixed; top: 0; left: 0;
+    width: 8px; height: 8px;
+    background: #E8002D;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.08s;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    position: fixed; top: 0; left: 0;
+    width: 32px; height: 32px;
+    border: 1.5px solid rgba(232,0,45,0.45);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.16s ease;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  .noise {
+    position: fixed; inset: 0; z-index: 50;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.025;
+    pointer-events: none;
+  }
+
+  /* ── VIDEO CONTAINER — max quality rendering ── */
+  #video-wrap {
+    position: fixed; inset: 0; z-index: 1;
+    background: #0A0A0B;
+  }
+
+  #intro-video {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    display: block;
+
+    /* GPU-accelerated, crisp rendering */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+
+    /* Prevent browser from downscaling quality */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+
+  /* Very subtle vignette — keeps edges dark without hurting quality */
+  .vignette {
+    position: fixed; inset: 0; z-index: 2;
+    background: radial-gradient(ellipse at center,
+      transparent 60%,
+      rgba(10,10,11,0.38) 100%);
+    pointer-events: none;
+  }
+
+  /* ── ET WATERMARK ── */
+  .et-watermark {
+    position: fixed; top: 32px; left: 40px;
+    z-index: 20;
+    display: flex; align-items: center; gap: 14px;
+    opacity: 0;
+    animation: fadeIn 0.8s ease 0.5s forwards;
+  }
+  .et-logo-mark {
+    font-family: 'Georgia', serif;
+    font-size: 22px; font-weight: 700;
+    color: #F5F0E8;
+    letter-spacing: -0.02em;
+    text-shadow: 0 2px 16px rgba(0,0,0,0.6);
+  }
+  .et-logo-mark span { color: #E8002D; }
+  .et-divider {
+    width: 1px; height: 20px;
+    background: rgba(245,240,232,0.22);
+  }
+  .et-sub-mark {
+    font-size: 10px; letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.38);
+    font-family: 'Georgia', serif;
+    text-shadow: 0 1px 10px rgba(0,0,0,0.7);
+  }
+
+  /* ── BOTTOM BAR ── */
+  .bottom-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    z-index: 20;
+    padding: 0 0 44px;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 18px;
+  }
+
+  /* Progress bar */
+  .progress-track {
+    width: min(480px, 80vw);
+    height: 2px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 2px;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeIn 0.6s ease 1s forwards;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #E8002D, #C8960C);
+    border-radius: 2px;
+    transition: width 0.15s linear;
+    box-shadow: 0 0 8px rgba(232,0,45,0.55);
+  }
+
+  /* Skip — appears at 2.5s */
+  .skip-btn {
+    opacity: 0;
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(10,10,11,0.4);
+    border: 1px solid rgba(255,255,255,0.13);
+    color: rgba(245,240,232,0.55);
+    font-family: 'Georgia', serif;
+    font-size: 11px; letter-spacing: 0.25em;
+    text-transform: uppercase;
+    padding: 10px 26px;
+    border-radius: 2px;
+    cursor: none;
+    transition: all 0.3s ease;
+    animation: skipReveal 0.6s ease 2.5s forwards;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .skip-btn:hover {
+    background: rgba(232,0,45,0.14);
+    border-color: rgba(232,0,45,0.4);
+    color: #F5F0E8;
+  }
+  .skip-btn svg {
+    width: 13px; height: 13px;
+    fill: none; stroke: currentColor;
+    stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+  }
+  .skip-btn:hover svg { transform: translateX(3px); }
+
+  /* ── TRANSITION — pure clean black fade, zero text ── */
+  #transition-overlay {
+    position: fixed; inset: 0; z-index: 200;
+    background: #000000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  #transition-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* ── FALLBACK ── */
+  #fallback {
+    position: fixed; inset: 0; z-index: 5;
+    display: none;
+    align-items: center; justify-content: center;
+    flex-direction: column; gap: 24px;
+    background: radial-gradient(ellipse at 30% 40%, #0D0808, #0A0A0B);
+    text-align: center; padding: 40px;
+  }
+  #fallback.show { display: flex; }
+  .fallback-bars {
+    display: flex; align-items: flex-end; gap: 6px;
+    height: 48px; opacity: 0.3;
+  }
+  .fallback-bars span {
+    width: 6px; background: #E8002D; border-radius: 3px;
+    animation: barBounce 1.2s ease infinite;
+  }
+  .fallback-bars span:nth-child(1){height:30%;animation-delay:0.0s;}
+  .fallback-bars span:nth-child(2){height:70%;animation-delay:0.1s;}
+  .fallback-bars span:nth-child(3){height:50%;animation-delay:0.2s;}
+  .fallback-bars span:nth-child(4){height:90%;animation-delay:0.3s;}
+  .fallback-bars span:nth-child(5){height:40%;animation-delay:0.4s;}
+  .fallback-bars span:nth-child(6){height:80%;animation-delay:0.2s;}
+  .fallback-bars span:nth-child(7){height:60%;animation-delay:0.1s;}
+  .fallback-msg {
+    font-size: 13px; color: rgba(245,240,232,0.35);
+    letter-spacing: 0.2em; text-transform: uppercase; line-height: 1.9;
+  }
+  .fallback-msg strong {
+    display: block; font-size: 10px;
+    color: rgba(245,240,232,0.2);
+    margin-top: 6px; letter-spacing: 0.3em;
+  }
+
+  /* ── KEYFRAMES ── */
+  @keyframes fadeIn {
+    from { opacity: 0; } to { opacity: 1; }
+  }
+  @keyframes skipReveal {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes barBounce {
+    0%, 100% { transform: scaleY(1); }
+    50%       { transform: scaleY(1.5); }
+  }
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NOISE -->
+<div class="noise"></div>
+
+<!-- ET WATERMARK -->
+<div class="et-watermark">
+  <div class="et-logo-mark">Economic <span>Times</span></div>
+  <div class="et-divider"></div>
+  <div class="et-sub-mark">NewsDesk Intelligence</div>
+</div>
+
+<!-- VIDEO — fullscreen, max quality -->
+<div id="video-wrap">
+  <!--
+    ══════════════════════════════════════════════════════════════
+    HOW TO GET THE BEST VIDEO QUALITY
+    ──────────────────────────────────────────────────────────────
+    1. Put your file here:
+         login/templates/static/et_intro_video.mp4
+
+    2. For maximum quality encode your video as:
+         Resolution : 1920×1080 (1080p) minimum, 4K if available
+         Codec MP4  : H.264 High Profile, CRF 18 (near-lossless)
+         Codec WebM : VP9, CRF 10, for Chrome/Firefox best quality
+         Bitrate    : 10–20 Mbps (1080p) · 40–60 Mbps (4K)
+         Frame rate : 24fps / 30fps / 60fps all work
+         Audio      : muted is required for browser autoplay
+
+    3. Optionally add a WebM copy for better Chrome quality:
+         login/templates/static/et_intro_video.webm
+
+    The browser will pick VP9/WebM first (better quality),
+    then fall back to H.264/MP4.
+    ══════════════════════════════════════════════════════════════
+  -->
+  <video
+    id="intro-video"
+    autoplay
+    muted
+    playsinline
+    preload="auto"
+    disablepictureinpicture
+    disableremoteplayback
+    x-webkit-airplay="deny"
+  >
+    <!-- VP9 WebM — superior quality on Chrome / Firefox -->
+    <source src="/static/et_intro_video.webm" type="video/webm; codecs=vp9,opus">
+    <!-- H.264 MP4 — universal fallback -->
+    <source src="/static/et_intro_video.mp4"  type="video/mp4; codecs=avc1.640028,mp4a.40.2">
+  </video>
+</div>
+
+<!-- VIGNETTE -->
+<div class="vignette"></div>
+
+<!-- FALLBACK -->
+<div id="fallback">
+  <div class="fallback-bars">
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span>
+  </div>
+  <div class="fallback-msg">
+    Loading Experience
+    <strong>Place your video at: login/templates/static/et_intro_video.mp4</strong>
+  </div>
+</div>
+
+<!-- BOTTOM BAR -->
+<div class="bottom-bar">
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <button class="skip-btn" onclick="goToIntro()">
+    Skip
+    <svg viewBox="0 0 24 24">
+      <polyline points="5 12 19 12"/>
+      <polyline points="13 6 19 12 13 18"/>
+    </svg>
+  </button>
+</div>
+
+<!-- PURE BLACK TRANSITION — zero text, zero logo -->
+<div id="transition-overlay"></div>
+
+<script>
+  /* ── CURSOR ── */
+  const cur  = document.getElementById('cursor');
+  const curR = document.getElementById('cursorRing');
+  document.addEventListener('mousemove', e => {
+    cur.style.left = e.clientX + 'px';
+    cur.style.top  = e.clientY + 'px';
+    setTimeout(() => {
+      curR.style.left = e.clientX + 'px';
+      curR.style.top  = e.clientY + 'px';
+    }, 60);
+  });
+
+  /* ── VIDEO ── */
+  const video = document.getElementById('intro-video');
+  const fill  = document.getElementById('progressFill');
+
+  // Block right-click / save-video
+  video.addEventListener('contextmenu', e => e.preventDefault());
+
+  // Progress bar sync
+  video.addEventListener('timeupdate', () => {
+    if (!video.duration) return;
+    fill.style.width = (video.currentTime / video.duration * 100) + '%';
+  });
+
+  /* ── TRANSITION: pure black fade → navigate ── */
+  function goToIntro() {
+    const overlay = document.getElementById('transition-overlay');
+    overlay.classList.add('active');
+    // CSS transition is 0.65s; wait 0.75s then navigate
+    setTimeout(() => {
+      window.location.href = '/static/intro.html';
+    }, 750);
+  }
+
+  /* ── VIDEO ENDS → go ── */
+  video.addEventListener('ended', () => {
+    fill.style.width = '100%';
+    setTimeout(goToIntro, 300);
+  });
+
+  /* ── ERROR / FALLBACK ── */
+  function handleFallback() {
+    document.getElementById('fallback').classList.add('show');
+    // Fake progress over 4 seconds then redirect
+    let p = 0;
+    const t = setInterval(() => {
+      p++;
+      fill.style.width = p + '%';
+      if (p >= 100) { clearInterval(t); setTimeout(goToIntro, 300); }
+    }, 40); // 40ms × 100 = 4000ms
+  }
+
+  video.addEventListener('error', handleFallback);
+
+  // If autoplay is blocked and video hasn't started in 5s → fallback
+  const guard = setTimeout(() => {
+    if (video.paused && video.currentTime === 0) handleFallback();
+  }, 5000);
+
+  video.addEventListener('playing', () => {
+    clearTimeout(guard);
+    document.getElementById('fallback').classList.remove('show');
+  });
+</script>
+</body>
+</html>

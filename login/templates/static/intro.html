@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Economic Times — Your Edge in Business</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --et-red: #E8002D;
+    --et-dark: #0A0A0B;
+    --et-gold: #C8960C;
+    --et-warm: #F5F0E8;
+    --et-mid: #1A1A1C;
+    --et-grey: #6B6B6B;
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: var(--et-dark);
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    position: fixed; top: 0; left: 0;
+    width: 10px; height: 10px;
+    background: var(--et-red);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    position: fixed; top: 0; left: 0;
+    width: 36px; height: 36px;
+    border: 1.5px solid rgba(232,0,45,0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.18s ease, width 0.3s ease, height 0.3s ease;
+  }
+
+  /* NOISE OVERLAY */
+  .noise {
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.04;
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  /* SCENE SYSTEM */
+  .scene {
+    position: fixed; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+
+  /* ======== SCENE 1: MARKET DATA RAIN ======== */
+  #scene-1 {
+    background: var(--et-dark);
+    z-index: 10;
+    opacity: 1;
+    transition: opacity 0.8s ease;
+  }
+
+  .ticker-grid {
+    position: absolute; inset: 0;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 0;
+    opacity: 0.12;
+    overflow: hidden;
+  }
+  .ticker-col {
+    display: flex; flex-direction: column;
+    gap: 0;
+    animation: tickerScroll linear infinite;
+  }
+  .ticker-col:nth-child(odd) { animation-direction: reverse; }
+  .ticker-col:nth-child(1) { animation-duration: 18s; }
+  .ticker-col:nth-child(2) { animation-duration: 22s; }
+  .ticker-col:nth-child(3) { animation-duration: 16s; }
+  .ticker-col:nth-child(4) { animation-duration: 25s; }
+  .ticker-col:nth-child(5) { animation-duration: 20s; }
+  .ticker-col:nth-child(6) { animation-duration: 14s; }
+  .ticker-col:nth-child(7) { animation-duration: 23s; }
+  .ticker-col:nth-child(8) { animation-duration: 17s; }
+
+  @keyframes tickerScroll {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-50%); }
+  }
+
+  .ticker-item {
+    padding: 12px 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    white-space: nowrap;
+  }
+  .ticker-item.up { color: #00C851; }
+  .ticker-item.down { color: var(--et-red); }
+  .ticker-item.neutral { color: rgba(255,255,255,0.5); }
+
+  /* Red horizontal line - like a trading terminal */
+  .scan-line {
+    position: absolute;
+    left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--et-red), transparent);
+    animation: scanMove 3s ease-in-out infinite;
+    z-index: 2;
+    box-shadow: 0 0 20px var(--et-red);
+  }
+  @keyframes scanMove {
+    0% { top: 0%; opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { top: 100%; opacity: 0; }
+  }
+
+  .scene-1-center {
+    position: relative; z-index: 5;
+    text-align: center;
+  }
+
+  .et-logo-intro {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(48px, 8vw, 100px);
+    font-weight: 900;
+    color: var(--et-warm);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    opacity: 0;
+    animation: logoReveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+    position: relative;
+  }
+  .et-logo-intro span { color: var(--et-red); }
+  .et-logo-intro::after {
+    content: '';
+    position: absolute;
+    bottom: -8px; left: 50%; transform: translateX(-50%);
+    width: 0; height: 3px;
+    background: var(--et-red);
+    animation: lineExpand 0.8s ease 1.4s forwards;
+  }
+  @keyframes lineExpand {
+    to { width: 100%; }
+  }
+
+  .et-tagline-intro {
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(12px, 1.5vw, 16px);
+    font-weight: 300;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.5);
+    margin-top: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1.6s forwards;
+  }
+
+  .loading-bar-wrap {
+    margin-top: 48px;
+    width: 200px;
+    height: 1px;
+    background: rgba(255,255,255,0.1);
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeUp 0.5s ease 1.8s forwards;
+  }
+  .loading-bar-fill {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    background: var(--et-red);
+    width: 0%;
+    animation: loadFill 3s cubic-bezier(0.4, 0, 0.2, 1) 2s forwards;
+  }
+  @keyframes loadFill {
+    0% { width: 0%; }
+    100% { width: 100%; }
+  }
+
+  @keyframes logoReveal {
+    from { opacity: 0; transform: translateY(30px) scale(0.95); filter: blur(10px); }
+    to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ======== SCENE 2: HEADLINE MONTAGE ======== */
+  #scene-2 {
+    background: var(--et-dark);
+    z-index: 9;
+    opacity: 0;
+  }
+
+  .headline-montage {
+    position: absolute; inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 8vw;
+  }
+
+  .hl-line {
+    display: flex; align-items: baseline;
+    gap: 20px;
+    overflow: hidden;
+    margin: 6px 0;
+  }
+  .hl-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(80px, 14vw, 180px);
+    color: var(--et-red);
+    line-height: 0.85;
+    opacity: 0;
+    transform: translateX(-60px);
+    transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    flex-shrink: 0;
+  }
+  .hl-text-block {
+    display: flex; flex-direction: column;
+    gap: 4px;
+    opacity: 0;
+    transform: translateX(40px);
+    transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s;
+  }
+  .hl-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(9px, 1vw, 11px);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(200,150,12,0.9);
+    font-weight: 500;
+  }
+  .hl-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(18px, 2.5vw, 32px);
+    color: var(--et-warm);
+    font-weight: 700;
+    line-height: 1.2;
+    max-width: 500px;
+  }
+  .hl-line.show .hl-number,
+  .hl-line.show .hl-text-block {
+    opacity: 1; transform: translateX(0);
+  }
+
+  .vertical-rule {
+    position: absolute; left: 8vw; top: 10%; bottom: 10%;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--et-red), transparent);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.8s ease;
+  }
+  #scene-2.active .vertical-rule { transform: scaleY(1); }
+
+  /* ======== SCENE 3: GLOBE CINEMATIC ======== */
+  #scene-3 {
+    background: radial-gradient(ellipse at center, #0D1117 0%, #000 100%);
+    z-index: 8;
+    opacity: 0;
+  }
+
+  .globe-canvas {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  canvas#globe { opacity: 0.9; }
+
+  .globe-overlay-text {
+    position: absolute; z-index: 5;
+    text-align: center;
+    bottom: 15%;
+  }
+  .globe-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 64px);
+    font-weight: 900;
+    font-style: italic;
+    color: var(--et-warm);
+    line-height: 1.1;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 1s ease 0.3s;
+  }
+  .globe-headline em { color: var(--et-gold); font-style: normal; }
+  #scene-3.active .globe-headline { opacity: 1; transform: translateY(0); }
+
+  .globe-sub {
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(11px, 1.2vw, 14px);
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-top: 16px;
+    opacity: 0;
+    transition: opacity 1s ease 0.8s;
+  }
+  #scene-3.active .globe-sub { opacity: 1; }
+
+  /* ======== SCENE 4: FEATURES ======== */
+  #scene-4 {
+    background: var(--et-warm);
+    z-index: 7;
+    opacity: 0;
+  }
+
+  .features-layout {
+    position: absolute; inset: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+  }
+
+  .feat-left {
+    background: var(--et-dark);
+    display: flex; flex-direction: column;
+    justify-content: center;
+    padding: 8vw;
+    position: relative;
+    overflow: hidden;
+  }
+  .feat-left::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -30%;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(232,0,45,0.15) 0%, transparent 70%);
+  }
+
+  .feat-eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px; letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--et-gold);
+    font-weight: 500;
+    margin-bottom: 24px;
+    opacity: 0; transform: translateY(20px);
+    transition: all 0.8s ease 0.2s;
+  }
+  .feat-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 900;
+    color: var(--et-warm);
+    line-height: 1.1;
+    margin-bottom: 32px;
+    opacity: 0; transform: translateY(20px);
+    transition: all 0.8s ease 0.4s;
+  }
+  .feat-heading span { color: var(--et-red); }
+
+  .feat-items {
+    display: flex; flex-direction: column; gap: 20px;
+  }
+  .feat-item {
+    display: flex; align-items: flex-start; gap: 16px;
+    opacity: 0; transform: translateY(15px);
+    transition: all 0.7s ease;
+  }
+  .feat-item:nth-child(1) { transition-delay: 0.5s; }
+  .feat-item:nth-child(2) { transition-delay: 0.65s; }
+  .feat-item:nth-child(3) { transition-delay: 0.8s; }
+
+  .feat-icon {
+    width: 36px; height: 36px; flex-shrink: 0;
+    background: rgba(232,0,45,0.12);
+    border: 1px solid rgba(232,0,45,0.3);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .feat-item-text h4 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 500;
+    color: var(--et-warm);
+    margin-bottom: 4px;
+  }
+  .feat-item-text p {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    color: rgba(245,240,232,0.4);
+    line-height: 1.5;
+  }
+
+  #scene-4.active .feat-eyebrow,
+  #scene-4.active .feat-heading,
+  #scene-4.active .feat-item { opacity: 1; transform: translateY(0); }
+
+  .feat-right {
+    background: var(--et-warm);
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .feat-card {
+    display: flex; flex-direction: column;
+    justify-content: flex-end;
+    padding: 32px 28px;
+    position: relative;
+    overflow: hidden;
+    border: 0.5px solid rgba(0,0,0,0.08);
+    opacity: 0;
+    transform: scale(0.97);
+    transition: all 0.7s ease;
+  }
+  .feat-card:nth-child(1) { transition-delay: 0.3s; }
+  .feat-card:nth-child(2) { transition-delay: 0.45s; }
+  .feat-card:nth-child(3) { transition-delay: 0.6s; }
+  .feat-card:nth-child(4) { transition-delay: 0.75s; }
+
+  #scene-4.active .feat-card { opacity: 1; transform: scale(1); }
+
+  .feat-card .card-icon {
+    font-size: 28px; margin-bottom: 12px;
+  }
+  .feat-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(16px, 1.5vw, 20px);
+    font-weight: 700;
+    color: var(--et-dark);
+    margin-bottom: 6px;
+  }
+  .feat-card p {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    color: var(--et-grey);
+    line-height: 1.5;
+  }
+  .feat-card .card-accent {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .feat-card:nth-child(1) .card-accent { background: var(--et-red); }
+  .feat-card:nth-child(2) .card-accent { background: var(--et-gold); }
+  .feat-card:nth-child(3) .card-accent { background: #0066CC; }
+  .feat-card:nth-child(4) .card-accent { background: #00A651; }
+
+  /* ======== SCENE 5: FINAL CTA ======== */
+  #scene-5 {
+    background: var(--et-dark);
+    z-index: 6;
+    opacity: 0;
+    overflow: hidden;
+  }
+
+  .cta-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 30% 50%, rgba(232,0,45,0.08) 0%, transparent 100%),
+      radial-gradient(ellipse 40% 60% at 80% 30%, rgba(200,150,12,0.05) 0%, transparent 100%);
+  }
+
+  /* Animated grid lines */
+  .grid-lines {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridMove 20s linear infinite;
+  }
+  @keyframes gridMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 60px 60px; }
+  }
+
+  .cta-content {
+    position: relative; z-index: 2;
+    text-align: center;
+    max-width: 900px;
+    padding: 40px;
+  }
+
+  .cta-pre {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px; letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: rgba(200,150,12,0.8);
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: none;
+  }
+  #scene-5.active .cta-pre {
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .cta-main {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 6vw, 88px);
+    font-weight: 900;
+    color: var(--et-warm);
+    line-height: 1.0;
+    margin-bottom: 28px;
+    opacity: 0;
+  }
+  .cta-main span { color: var(--et-red); }
+  .cta-main em {
+    font-style: italic;
+    color: var(--et-gold);
+  }
+  #scene-5.active .cta-main {
+    animation: fadeUp 1s ease 0.5s forwards;
+  }
+
+  .cta-desc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(14px, 1.5vw, 17px);
+    color: rgba(245,240,232,0.5);
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 560px;
+    margin: 0 auto 44px;
+    opacity: 0;
+  }
+  #scene-5.active .cta-desc {
+    animation: fadeUp 0.8s ease 0.9s forwards;
+  }
+
+  .cta-redirect-bar {
+    display: flex; align-items: center; justify-content: center;
+    gap: 16px;
+    opacity: 0;
+  }
+  #scene-5.active .cta-redirect-bar {
+    animation: fadeUp 0.8s ease 1.2s forwards;
+  }
+
+  .redirect-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.1em;
+  }
+
+  .progress-ring {
+    width: 56px; height: 56px;
+    position: relative;
+  }
+  .progress-ring svg {
+    width: 100%; height: 100%;
+    transform: rotate(-90deg);
+  }
+  .progress-ring circle {
+    fill: none;
+    stroke-width: 2;
+  }
+  .ring-bg { stroke: rgba(255,255,255,0.1); }
+  .ring-fill {
+    stroke: var(--et-red);
+    stroke-dasharray: 138;
+    stroke-dashoffset: 138;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.1s linear;
+  }
+  .ring-count {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: var(--et-warm);
+  }
+
+  .skip-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.4);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 10px 24px;
+    cursor: none;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+  }
+  .skip-btn:hover {
+    border-color: var(--et-red);
+    color: var(--et-warm);
+    background: rgba(232,0,45,0.1);
+  }
+
+  /* Live stat bar at top */
+  .live-bar {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: 36px;
+    background: var(--et-red);
+    display: flex; align-items: center;
+    padding: 0 24px;
+    gap: 24px;
+    z-index: 500;
+    opacity: 0;
+    transform: translateY(-100%);
+    transition: all 0.6s ease 2.5s;
+    overflow: hidden;
+  }
+  .live-bar.show { opacity: 1; transform: translateY(0); }
+
+  .live-dot {
+    width: 6px; height: 6px;
+    background: white;
+    border-radius: 50%;
+    animation: pulse 1s ease infinite;
+    flex-shrink: 0;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.7); }
+  }
+
+  .live-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px; letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: white; font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  .live-ticker {
+    display: flex; gap: 0;
+    overflow: hidden;
+    flex: 1;
+    position: relative;
+  }
+  .live-ticker::before, .live-ticker::after {
+    content: '';
+    position: absolute; top: 0; bottom: 0;
+    width: 40px; z-index: 2;
+    pointer-events: none;
+  }
+  .live-ticker::before { left: 0; background: linear-gradient(90deg, var(--et-red), transparent); }
+  .live-ticker::after { right: 0; background: linear-gradient(-90deg, var(--et-red), transparent); }
+
+  .ticker-scroll {
+    display: flex; gap: 40px;
+    animation: tickerRun 25s linear infinite;
+    white-space: nowrap;
+  }
+  .ticker-scroll span {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px; font-weight: 400;
+    color: rgba(255,255,255,0.9);
+    letter-spacing: 0.05em;
+  }
+  .ticker-scroll span.up::after { content: ' ▲'; color: #00ff88; }
+  .ticker-scroll span.down::after { content: ' ▼'; color: #ffaaaa; }
+  @keyframes tickerRun {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ET watermark bottom right */
+  .watermark {
+    position: fixed;
+    bottom: 24px; right: 32px;
+    font-family: 'Playfair Display', serif;
+    font-size: 11px;
+    color: rgba(255,255,255,0.08);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    z-index: 200;
+  }
+
+  /* Scene transitions */
+  .scene.hidden { pointer-events: none; }
+
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NOISE -->
+<div class="noise"></div>
+
+<!-- WATERMARK -->
+<div class="watermark">Economic Times © 2025</div>
+
+<!-- LIVE TICKER BAR -->
+<div class="live-bar" id="liveBar">
+  <div class="live-dot"></div>
+  <div class="live-text">Live Markets</div>
+  <div class="live-ticker">
+    <div class="ticker-scroll" id="tickerScroll">
+      <span class="up">SENSEX 79,248.45 +342.10</span>
+      <span class="down">NIFTY 24,012.60 −85.30</span>
+      <span class="up">RELIANCE ₹2,941.75 +1.2%</span>
+      <span class="up">HDFC BANK ₹1,762.40 +0.8%</span>
+      <span class="down">TCS ₹4,102.15 −0.4%</span>
+      <span class="up">INFOSYS ₹1,835.90 +1.6%</span>
+      <span class="up">USD/INR 83.42 +0.12</span>
+      <span class="up">GOLD ₹72,450 +0.3%</span>
+      <span class="down">CRUDE OIL $84.20 −1.1%</span>
+      <span class="up">WIPRO ₹476.55 +2.1%</span>
+      <span class="up">SENSEX 79,248.45 +342.10</span>
+      <span class="down">NIFTY 24,012.60 −85.30</span>
+      <span class="up">RELIANCE ₹2,941.75 +1.2%</span>
+      <span class="up">HDFC BANK ₹1,762.40 +0.8%</span>
+      <span class="down">TCS ₹4,102.15 −0.4%</span>
+      <span class="up">INFOSYS ₹1,835.90 +1.6%</span>
+      <span class="up">USD/INR 83.42 +0.12</span>
+      <span class="up">GOLD ₹72,450 +0.3%</span>
+      <span class="down">CRUDE OIL $84.20 −1.1%</span>
+      <span class="up">WIPRO ₹476.55 +2.1%</span>
+    </div>
+  </div>
+</div>
+
+<!-- ======== SCENE 1: LOGO SPLASH ======== -->
+<div class="scene" id="scene-1">
+  <div class="ticker-grid" id="tickerGrid"></div>
+  <div class="scan-line"></div>
+  <div class="scene-1-center">
+    <div class="et-logo-intro">Economic <span>Times</span></div>
+    <div class="et-tagline-intro">Your Intelligence. Your Edge. Your Market.</div>
+    <div style="display:flex;justify-content:center;margin-top:48px;">
+      <div class="loading-bar-wrap">
+        <div class="loading-bar-fill"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== SCENE 2: HEADLINE STATS ======== -->
+<div class="scene hidden" id="scene-2">
+  <div class="vertical-rule"></div>
+  <div class="headline-montage">
+    <div class="hl-line" id="hl1">
+      <div class="hl-number">₹82T</div>
+      <div class="hl-text-block">
+        <div class="hl-label">India GDP 2024</div>
+        <div class="hl-title">The world's fastest growing major economy</div>
+      </div>
+    </div>
+    <div class="hl-line" id="hl2">
+      <div class="hl-number">9Cr+</div>
+      <div class="hl-text-block">
+        <div class="hl-label">Active Investors</div>
+        <div class="hl-title">Indians reshaping global capital markets</div>
+      </div>
+    </div>
+    <div class="hl-line" id="hl3">
+      <div class="hl-number">24/7</div>
+      <div class="hl-text-block">
+        <div class="hl-label">Market Intelligence</div>
+        <div class="hl-title">Real-time signals from boardrooms to trading floors</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== SCENE 3: GLOBE ======== -->
+<div class="scene hidden" id="scene-3">
+  <div class="globe-canvas">
+    <canvas id="globe" width="700" height="700"></canvas>
+  </div>
+  <div class="globe-overlay-text">
+    <div class="globe-headline">Markets don't sleep.<br><em>Neither should your intelligence.</em></div>
+    <div class="globe-sub">Covering 120+ markets across 6 continents</div>
+  </div>
+</div>
+
+<!-- ======== SCENE 4: FEATURES ======== -->
+<div class="scene hidden" id="scene-4">
+  <div class="features-layout">
+    <div class="feat-left">
+      <div class="feat-eyebrow">Personalised For You</div>
+      <div class="feat-heading">Business news<br>that <span>works</span><br>as hard as you do</div>
+      <div class="feat-items">
+        <div class="feat-item">
+          <div class="feat-icon">⚡</div>
+          <div class="feat-item-text">
+            <h4>AI-Curated Feed</h4>
+            <p>Trained on your portfolio, sector, and reading patterns — every story matters.</p>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon">📊</div>
+          <div class="feat-item-text">
+            <h4>Market Intelligence</h4>
+            <p>Live screeners, technicals, and institutional-grade research in one place.</p>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon">🔔</div>
+          <div class="feat-item-text">
+            <h4>Smart Alerts</h4>
+            <p>Beat the market with price, volume, and sentiment triggers before they move.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="feat-right">
+      <div class="feat-card">
+        <div class="card-accent"></div>
+        <div class="card-icon">📈</div>
+        <h3>Markets & Stocks</h3>
+        <p>Real-time equity, F&O, commodity and forex data with depth analytics.</p>
+      </div>
+      <div class="feat-card">
+        <div class="card-accent"></div>
+        <div class="card-icon">🏦</div>
+        <h3>Economy & Policy</h3>
+        <p>RBI, Budget, GST — first read on the policies that move your money.</p>
+      </div>
+      <div class="feat-card">
+        <div class="card-accent"></div>
+        <div class="card-icon">🌐</div>
+        <h3>Global Business</h3>
+        <p>From Wall Street to Dalal Street, track cross-border capital flows live.</p>
+      </div>
+      <div class="feat-card">
+        <div class="card-accent"></div>
+        <div class="card-icon">💼</div>
+        <h3>Startup & VC</h3>
+        <p>Funding rounds, valuations and the deals reshaping Indian industry.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== SCENE 5: FINAL CTA ======== -->
+<div class="scene hidden" id="scene-5">
+  <div class="cta-bg"></div>
+  <div class="grid-lines"></div>
+  <div class="cta-content">
+    <div class="cta-pre">Your Personalised Business Intelligence Platform</div>
+    <div class="cta-main">
+      Stay Ahead.<br>
+      Stay <em>Informed.</em><br>
+      Stay <span>Sharp.</span>
+    </div>
+    <div class="cta-desc">
+      Join millions of India's top business leaders, investors, and entrepreneurs who trust Economic Times to stay a move ahead of the markets.
+    </div>
+    <div class="cta-redirect-bar">
+      <span class="redirect-label">Redirecting to your experience</span>
+      <div class="progress-ring" id="progressRing">
+        <svg viewBox="0 0 48 48">
+          <circle class="ring-bg" cx="24" cy="24" r="22"/>
+          <circle class="ring-fill" id="ringFill" cx="24" cy="24" r="22"/>
+        </svg>
+        <div class="ring-count" id="ringCount">5</div>
+      </div>
+      <button class="skip-btn" onclick="goToLogin()">Skip Intro</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ---- CURSOR ----
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursorRing');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+  setTimeout(() => {
+    cursorRing.style.left = e.clientX + 'px';
+    cursorRing.style.top = e.clientY + 'px';
+  }, 60);
+});
+
+// ---- TICKER GRID FILL ----
+const tickers = [
+  ['RELIANCE','2941.75','+1.2%','up'],['TCS','4102.15','-0.4%','down'],
+  ['HDFC','1762.40','+0.8%','up'],['INFY','1835.90','+1.6%','up'],
+  ['WIPRO','476.55','+2.1%','up'],['ONGC','267.80','-0.6%','down'],
+  ['SBI','812.45','+0.9%','up'],['ICICIBANK','1104.20','+1.1%','up'],
+  ['BAJFINANCE','7281.50','-0.3%','down'],['MARUTI','12456.75','+0.5%','up'],
+  ['LT','3621.30','+0.7%','up'],['HCLTECH','1567.80','-0.2%','down'],
+  ['AXISBANK','1085.60','+1.4%','up'],['SUNPHARMA','1687.20','+0.6%','up'],
+  ['TATAMOTORS','1042.30','+2.3%','up'],['POWERGRID','329.75','-0.1%','down'],
+  ['ULTRACEMCO','10234.80','+0.4%','up'],['KOTAK','1890.40','-0.8%','down'],
+  ['ADANIPORTS','1365.20','+1.8%','up'],['HINDALCO','673.45','+0.9%','up'],
+  ['SENSEX','79248','+342','up'],['NIFTY','24012','-85','down'],
+  ['GOLD','72450','+0.3%','up'],['SILVER','89240','+0.5%','up'],
+  ['CRUDE','6985','-1.1%','down'],['USD/INR','83.42','+0.12','up'],
+];
+
+const grid = document.getElementById('tickerGrid');
+for(let c = 0; c < 8; c++){
+  const col = document.createElement('div');
+  col.className = 'ticker-col';
+  let html = '';
+  for(let r = 0; r < 30; r++){
+    const t = tickers[Math.floor(Math.random() * tickers.length)];
+    html += `<div class="ticker-item ${t[3]}">${t[0]} ${t[1]} ${t[2]}</div>`;
+  }
+  col.innerHTML = html + html; // duplicate for loop
+  grid.appendChild(col);
+}
+
+// ---- GLOBE DRAW ----
+function drawGlobe() {
+  const canvas = document.getElementById('globe');
+  const ctx = canvas.getContext('2d');
+  const cx = 350, cy = 350, r = 280;
+  let angle = 0;
+
+  function frame() {
+    ctx.clearRect(0, 0, 700, 700);
+    
+    // Atmosphere glow
+    const atmo = ctx.createRadialGradient(cx, cy, r * 0.8, cx, cy, r * 1.15);
+    atmo.addColorStop(0, 'rgba(232,0,45,0.0)');
+    atmo.addColorStop(0.5, 'rgba(232,0,45,0.04)');
+    atmo.addColorStop(1, 'rgba(232,0,45,0.0)');
+    ctx.beginPath(); ctx.arc(cx, cy, r * 1.15, 0, Math.PI * 2);
+    ctx.fillStyle = atmo; ctx.fill();
+
+    // Globe base
+    const grad = ctx.createRadialGradient(cx - 60, cy - 60, 0, cx, cy, r);
+    grad.addColorStop(0, '#1a1f2e');
+    grad.addColorStop(0.5, '#0d1117');
+    grad.addColorStop(1, '#060810');
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fillStyle = grad; ctx.fill();
+    ctx.strokeStyle = 'rgba(232,0,45,0.3)'; ctx.lineWidth = 1; ctx.stroke();
+
+    // Latitude lines
+    ctx.save();
+    ctx.clip();
+    for(let lat = -80; lat <= 80; lat += 20) {
+      const y = cy + r * Math.sin(lat * Math.PI / 180);
+      const rLat = r * Math.cos(lat * Math.PI / 180);
+      ctx.beginPath();
+      ctx.ellipse(cx, y, rLat, rLat * 0.25, 0, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth = 0.5; ctx.stroke();
+    }
+    // Longitude lines
+    for(let lng = 0; lng < 180; lng += 20) {
+      const lngRad = (lng + angle) * Math.PI / 180;
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, r * Math.abs(Math.cos(lngRad)), r, 0, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(255,255,255,0.05)'; ctx.lineWidth = 0.5; ctx.stroke();
+    }
+
+    // City dots — major financial hubs
+    const cities = [
+      [28.6, 77.2], [19.0, 72.8], [22.5, 88.3],    // Delhi, Mumbai, Kolkata
+      [51.5, -0.1], [40.7, -74.0], [35.7, 139.7],  // London, NYC, Tokyo
+      [22.3, 114.2], [1.3, 103.8], [48.8, 2.3],    // HK, Singapore, Paris
+      [55.7, 37.6], [-33.8, 151.2], [25.2, 55.3],  // Moscow, Sydney, Dubai
+      [37.5, 127.0], [-23.5, -46.6],                // Seoul, Sao Paulo
+    ];
+
+    cities.forEach(([lat, lng]) => {
+      const lngAdj = (lng + angle * 2) % 360;
+      const lngRad = lngAdj * Math.PI / 180;
+      const latRad = lat * Math.PI / 180;
+      const visible = Math.cos(lngRad) > -0.1;
+      if (!visible) return;
+
+      const x = cx + r * Math.cos(latRad) * Math.sin(lngRad);
+      const y = cy - r * Math.sin(latRad);
+      const opacity = Math.max(0, Math.cos(lngRad));
+
+      // Pulse
+      const pulse = 0.5 + 0.5 * Math.sin(Date.now() * 0.002 + lat);
+      ctx.beginPath();
+      ctx.arc(x, y, 3 + pulse * 3, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(232,0,45,${opacity * 0.2 * pulse})`;
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(x, y, 2, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(232,0,45,${opacity * 0.9})`;
+      ctx.fill();
+    });
+
+    ctx.restore();
+
+    // Equator highlight
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, r, r * 0.25, 0, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(232,0,45,0.15)'; ctx.lineWidth = 1; ctx.stroke();
+
+    angle += 0.1;
+    requestAnimationFrame(frame);
+  }
+  frame();
+}
+
+// ---- SCENE ORCHESTRATION ----
+function goToLogin() {
+  document.body.style.transition = 'opacity 0.5s ease';
+  document.body.style.opacity = '0';
+  setTimeout(() => {
+    window.location.href = '/auth/login';   // ← make sure it's this, not 'login.html'
+  }, 500);
+}
+
+
+const scenes = ['scene-1','scene-2','scene-3','scene-4','scene-5'];
+let currentScene = 0;
+
+function showScene(idx) {
+  scenes.forEach((id, i) => {
+    const el = document.getElementById(id);
+    if(i === idx) {
+      el.classList.remove('hidden');
+      el.style.opacity = '0';
+      el.style.transition = 'opacity 0.8s ease';
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => { el.style.opacity = '1'; });
+      });
+      el.classList.add('active');
+    } else if(i < idx) {
+      el.style.opacity = '0';
+      setTimeout(() => el.classList.add('hidden'), 800);
+    }
+  });
+}
+
+// Start sequence
+setTimeout(() => {
+  document.getElementById('liveBar').classList.add('show');
+}, 2500);
+
+// Scene 1 → 2 after 5s
+setTimeout(() => {
+  showScene(1);
+  setTimeout(() => {
+    ['hl1','hl2','hl3'].forEach((id, i) => {
+      setTimeout(() => document.getElementById(id).classList.add('show'), i * 300);
+    });
+  }, 200);
+}, 5000);
+
+// Scene 2 → 3 after 4s
+setTimeout(() => {
+  showScene(2);
+  drawGlobe();
+  setTimeout(() => document.getElementById('scene-3').classList.add('active'), 300);
+}, 9000);
+
+// Scene 3 → 4 after 4s
+setTimeout(() => {
+  showScene(3);
+  setTimeout(() => document.getElementById('scene-4').classList.add('active'), 200);
+}, 13000);
+
+// Scene 4 → 5 after 4s
+setTimeout(() => {
+  showScene(4);
+  // Start countdown
+  let count = 5;
+  const ringFill = document.getElementById('ringFill');
+  const ringCount = document.getElementById('ringCount');
+  const circumference = 138;
+  
+  const interval = setInterval(() => {
+    count--;
+    ringCount.textContent = count;
+    ringFill.style.strokeDashoffset = circumference - (circumference * (5 - count) / 5);
+    if(count <= 0) {
+      clearInterval(interval);
+      goToLogin();
+    }
+  }, 1000);
+}, 17000);
+</script>
+</body>
+</html>

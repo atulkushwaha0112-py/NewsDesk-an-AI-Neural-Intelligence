@@ -1,72 +1,1109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Login – NewsDesk</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>NewsDesk — AI Neural Business Intelligence | Economic Times</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap');
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#09090f;--card:#111118;--border:#1f1f2e;--accent:#f97316;--text:#f0eff0;--muted:#6b7280;--err:#ef4444;--ok:#22c55e}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem;
-background-image:radial-gradient(ellipse at 20% 50%,rgba(249,115,22,.08) 0,transparent 55%),radial-gradient(ellipse at 80% 20%,rgba(251,146,60,.05) 0,transparent 45%)}
-.wrap{width:100%;max-width:400px}
-.brand{text-align:center;margin-bottom:2rem}
-.brand h1{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;letter-spacing:-.03em}
-.brand h1 span{color:var(--accent)}
-.brand p{color:var(--muted);font-size:.875rem;margin-top:.3rem}
-.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem}
-.card h2{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;margin-bottom:1.5rem}
-.field{margin-bottom:1rem}
-label{display:block;font-size:.75rem;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem}
-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:.7rem 1rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;transition:border-color .2s}
-input:focus{border-color:var(--accent)}
-input::placeholder{color:var(--muted)}
-.btn{width:100%;background:var(--accent);color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;border:none;border-radius:8px;padding:.8rem;cursor:pointer;margin-top:1.2rem;transition:opacity .2s}
-.btn:hover{opacity:.9}
-.btn:disabled{opacity:.5;cursor:not-allowed}
-.foot{text-align:center;margin-top:1.2rem;font-size:.85rem;color:var(--muted)}
-.foot a{color:var(--accent);text-decoration:none;font-weight:500}
-.alert{padding:.7rem 1rem;border-radius:8px;font-size:.85rem;margin-bottom:1rem;display:none}
-.alert.err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#fca5a5}
-.alert.ok{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:#86efac}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --et-primary: #0A2A38;
+  --et-deep: #051E28;
+  --et-gold: #E5B83C;
+  --et-gold-glow: rgba(229, 184, 60, 0.5);
+  --et-teal: #2F9B7A;
+  --et-cream: #FFFBF0;
+  --et-paper: #FEF7E8;
+  --et-graphite: #2C3E3F;
+  --et-mid: #8B7A6B;
+  --et-dark: #1F2E2A;
+  --ai-electric: #00D9FF;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: radial-gradient(circle at 20% 30%, #FFFBF0, #FCF3E0);
+  min-height: 100vh;
+  overflow: hidden;
+  color: var(--et-dark);
+}
+
+#canvas-container {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+/* Premium Navigation - Floating Crystal */
+.top-nav {
+  position: fixed;
+  top: 24px;
+  left: 28px;
+  right: 28px;
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 36px;
+  background: rgba(255, 251, 240, 0.85);
+  backdrop-filter: blur(24px);
+  border-radius: 80px;
+  border: 1px solid rgba(229, 184, 60, 0.4);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(229, 184, 60, 0.2) inset;
+  z-index: 100;
+  animation: floatNav 0.6s ease-out;
+}
+
+@keyframes floatNav {
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.newsdesk-logo {
+  background: linear-gradient(135deg, var(--et-primary), var(--et-teal));
+  color: var(--et-gold);
+  font-weight: 800;
+  font-size: 1.1rem;
+  padding: 10px 24px;
+  border-radius: 50px;
+  letter-spacing: -0.2px;
+  box-shadow: 0 6px 20px rgba(10, 42, 56, 0.25);
+  border: 1px solid var(--et-gold);
+  position: relative;
+  overflow: hidden;
+}
+
+.newsdesk-logo::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(115deg, transparent, rgba(229, 184, 60, 0.2), transparent);
+  transform: rotate(30deg);
+  animation: shimmerLogo 3s infinite;
+}
+
+@keyframes shimmerLogo {
+  0% { transform: translateX(-100%) rotate(30deg); }
+  100% { transform: translateX(100%) rotate(30deg); }
+}
+
+.brand-text {
+  font-weight: 800;
+  font-size: 1.25rem;
+  background: linear-gradient(135deg, var(--et-primary), var(--et-teal));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ai-badge {
+  background: linear-gradient(135deg, rgba(229, 184, 60, 0.2), rgba(47, 155, 122, 0.2));
+  padding: 6px 16px;
+  border-radius: 40px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--et-gold);
+  border: 1px solid rgba(229, 184, 60, 0.5);
+  margin-left: 12px;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(4px);
+}
+
+.right-stats {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.live-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(47, 155, 122, 0.15);
+  padding: 8px 20px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--et-teal);
+  border: 1px solid rgba(47, 155, 122, 0.4);
+  backdrop-filter: blur(4px);
+}
+
+.live-dot {
+  width: 10px;
+  height: 10px;
+  background: #2F9B7A;
+  border-radius: 50%;
+  animation: pulseNeural 1.2s infinite;
+  box-shadow: 0 0 12px #2F9B7A;
+}
+
+@keyframes pulseNeural {
+  0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(47, 155, 122, 0.7); }
+  50% { opacity: 0.6; transform: scale(0.9); box-shadow: 0 0 0 6px rgba(47, 155, 122, 0); }
+}
+
+.market-chip {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 8px 18px;
+  border-radius: 40px;
+  background: white;
+  border: 1px solid rgba(229, 184, 60, 0.3);
+  font-family: monospace;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.market-chip.up { color: var(--et-teal); background: linear-gradient(135deg, white, rgba(47, 155, 122, 0.05)); }
+.market-chip.dn { color: #E67E22; background: linear-gradient(135deg, white, rgba(230, 126, 34, 0.05)); }
+
+#liveClock {
+  font-family: monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--et-mid);
+  background: rgba(0, 0, 0, 0.03);
+  padding: 8px 18px;
+  border-radius: 40px;
+  letter-spacing: 0.5px;
+}
+
+/* Main Card - Holographic Premium */
+.login-wrapper {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 200;
+  width: 560px;
+  animation: levitate 0.8s cubic-bezier(0.16, 1, 0.3, 1.2) forwards;
+}
+
+@keyframes levitate {
+  from { opacity: 0; transform: translate(-50%, -40%) scale(0.96); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+.login-card {
+  background: rgba(255, 251, 240, 0.94);
+  backdrop-filter: blur(32px);
+  border-radius: 64px;
+  border: 1px solid rgba(229, 184, 60, 0.5);
+  box-shadow: 0 40px 80px rgba(10, 42, 56, 0.12), 0 0 0 1px rgba(229, 184, 60, 0.2) inset, 0 0 40px rgba(229, 184, 60, 0.1);
+  padding: 48px 48px 48px;
+  transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+}
+
+.login-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 48px 96px rgba(229, 184, 60, 0.18);
+}
+
+.card-accent {
+  width: 80px;
+  height: 5px;
+  background: linear-gradient(90deg, var(--et-gold), var(--et-teal), var(--et-gold));
+  border-radius: 4px;
+  margin-bottom: 28px;
+  animation: gradientShift 3s infinite;
+  background-size: 200% auto;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% center; }
+  50% { background-position: 100% center; }
+}
+
+.welcome-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 10px;
+  color: var(--et-primary);
+}
+
+.welcome-title .ai-highlight {
+  background: linear-gradient(135deg, var(--et-gold), var(--et-teal), #00D9FF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+  animation: textGlow 2s infinite;
+}
+
+@keyframes textGlow {
+  0%, 100% { filter: drop-shadow(0 0 2px rgba(229, 184, 60, 0.3)); }
+  50% { filter: drop-shadow(0 0 8px rgba(229, 184, 60, 0.6)); }
+}
+
+.card-sub {
+  font-size: 0.88rem;
+  color: var(--et-mid);
+  margin-bottom: 32px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ai-chip {
+  background: linear-gradient(135deg, var(--et-gold), #B8860B);
+  padding: 4px 14px;
+  border-radius: 30px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--et-primary);
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(229, 184, 60, 0.4);
+}
+
+/* AI Breaking News - Neural Pulse */
+.breaking-module {
+  background: linear-gradient(115deg, rgba(229, 184, 60, 0.08), rgba(47, 155, 122, 0.05));
+  border-radius: 40px;
+  padding: 20px 24px;
+  margin-bottom: 28px;
+  border-left: 5px solid var(--et-gold);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(4px);
+}
+
+.breaking-module::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(229, 184, 60, 0.1), transparent);
+  animation: neuralScan 4s linear infinite;
+}
+
+@keyframes neuralScan {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+
+.breaking-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--et-gold);
+  margin-bottom: 14px;
+}
+
+.breaking-track {
+  height: 58px;
+  position: relative;
+  overflow: hidden;
+}
+
+.breaking-item {
+  position: absolute;
+  width: 100%;
+  font-weight: 600;
+  font-size: 0.94rem;
+  color: var(--et-dark);
+  line-height: 1.45;
+  transition: transform 0.5s cubic-bezier(0.2, 0.85, 0.4, 1), opacity 0.45s;
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+.breaking-item.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Market Dashboard - 3D Cards */
+.market-dashboard {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 36px;
+}
+
+.market-tile {
+  background: white;
+  border-radius: 32px;
+  padding: 16px 10px;
+  text-align: center;
+  border: 1px solid rgba(229, 184, 60, 0.2);
+  transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.market-tile::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--et-gold), var(--et-teal));
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.market-tile:hover::before {
+  transform: scaleX(1);
+}
+
+.market-tile:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: var(--et-gold);
+  box-shadow: 0 20px 35px rgba(229, 184, 60, 0.2);
+}
+
+.tile-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--et-mid);
+  letter-spacing: 1px;
+}
+
+.tile-value {
+  font-family: monospace;
+  font-weight: 800;
+  font-size: 1.1rem;
+  margin-top: 8px;
+  color: var(--et-primary);
+}
+
+.tile-change {
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin-top: 6px;
+}
+
+.tile-change.up { color: var(--et-teal); }
+.tile-change.down { color: #E67E22; }
+
+/* Input Fields - Neon Touch */
+.input-field {
+  margin-bottom: 22px;
+  position: relative;
+}
+
+.input-field input {
+  width: 100%;
+  background: #FFFFFF;
+  border: 2px solid rgba(229, 184, 60, 0.2);
+  border-radius: 56px;
+  padding: 20px 28px 10px 28px;
+  font-size: 1rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  outline: none;
+  transition: all 0.3s;
+  color: var(--et-dark);
+}
+
+.input-field label {
+  position: absolute;
+  left: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.95rem;
+  color: var(--et-mid);
+  pointer-events: none;
+  transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  font-weight: 500;
+}
+
+.input-field input:focus {
+  border-color: var(--et-gold);
+  box-shadow: 0 0 0 6px rgba(229, 184, 60, 0.15);
+  transform: scale(1.01);
+}
+
+.input-field input:focus ~ label,
+.input-field input:not(:placeholder-shown) ~ label {
+  top: 12px;
+  font-size: 0.65rem;
+  color: var(--et-gold);
+  font-weight: 800;
+}
+
+/* Login Button - Dynamic Neural */
+.login-btn {
+  width: 100%;
+  background: linear-gradient(105deg, var(--et-primary), var(--et-teal), var(--et-primary));
+  background-size: 200% auto;
+  border: none;
+  border-radius: 56px;
+  padding: 18px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  color: white;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 12px 30px rgba(10, 42, 56, 0.4);
+  margin-top: 16px;
+  animation: gradientFlow 3s infinite;
+}
+
+@keyframes gradientFlow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.login-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 40px rgba(229, 184, 60, 0.45);
+}
+
+.btn-ripple {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.4) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.7s;
+}
+
+.login-btn:hover .btn-ripple {
+  transform: translateX(100%);
+}
+
+.card-footer-links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 28px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.card-footer-links a {
+  color: var(--et-teal);
+  text-decoration: none;
+  font-weight: 700;
+  transition: color 0.2s;
+}
+
+.card-footer-links a:hover {
+  color: var(--et-gold);
+}
+
+.ai-footer-badge {
+  display: flex;
+  gap: 8px;
+  color: var(--et-mid);
+  font-size: 0.68rem;
+  align-items: center;
+}
+
+.alert-message {
+  margin: 12px 0 20px;
+  padding: 14px 20px;
+  border-radius: 40px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  display: none;
+  backdrop-filter: blur(8px);
+}
+
+.alert-error { background: rgba(230, 126, 34, 0.12); border-left: 4px solid #E67E22; color: #B85C1A; }
+.alert-success { background: rgba(47, 155, 122, 0.12); border-left: 4px solid #2F9B7A; color: #1E6B55; }
+
+/* Bottom Ticker - Hyperloop */
+.ticker-bar {
+  position: fixed;
+  bottom: 24px;
+  left: 28px;
+  right: 28px;
+  background: rgba(10, 42, 56, 0.88);
+  backdrop-filter: blur(24px);
+  border-radius: 64px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  z-index: 100;
+  border: 1px solid rgba(229, 184, 60, 0.5);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: slideUpTicker 0.6s ease;
+}
+
+@keyframes slideUpTicker {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.ticker-label {
+  background: linear-gradient(115deg, var(--et-gold), #B8860B);
+  color: var(--et-primary);
+  padding: 0 36px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  border-radius: 64px 0 0 64px;
+  font-weight: 800;
+  font-size: 0.75rem;
+  letter-spacing: 1.5px;
+  gap: 10px;
+}
+
+.ticker-scroll {
+  flex: 1;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, black 4%, black 96%, transparent);
+}
+
+.ticker-items {
+  display: flex;
+  white-space: nowrap;
+  animation: scrollHyperloop 28s linear infinite;
+}
+
+.ticker-item {
+  display: inline-flex;
+  gap: 18px;
+  padding: 0 36px;
+  border-right: 1px solid rgba(229, 184, 60, 0.4);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #FEF7E8;
+}
+
+@keyframes scrollHyperloop {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Tooltip - Premium Glass */
+.country-tooltip {
+  position: fixed;
+  z-index: 300;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(15px) scale(0.95);
+  transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.2);
+}
+
+.country-tooltip.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.tooltip-card {
+  background: rgba(255, 251, 240, 0.98);
+  backdrop-filter: blur(24px);
+  border-radius: 40px;
+  padding: 20px 26px;
+  width: 310px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+  border-left: 5px solid var(--et-gold);
+}
+
+/* Music Control Button */
+.music-control {
+  position: fixed;
+  bottom: 100px;
+  right: 32px;
+  z-index: 150;
+  background: rgba(10, 42, 56, 0.75);
+  backdrop-filter: blur(12px);
+  border-radius: 60px;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid rgba(229, 184, 60, 0.4);
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--et-gold);
+}
+
+.music-control:hover {
+  transform: scale(1.05);
+  background: rgba(10, 42, 56, 0.9);
+  border-color: var(--et-gold);
+}
+
+.music-icon {
+  font-size: 1.2rem;
+}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="brand"><h1>News<span>Desk</span></h1><p>Your personalised financial news hub</p></div>
-  <div class="card">
-    <h2>Welcome back</h2>
-    <div class="alert err" id="err"></div>
-    <div class="alert ok"  id="ok"></div>
-    <div class="field"><label>Username</label><input id="username" placeholder="your_username" autocomplete="username"/></div>
-    <div class="field"><label>Password</label><input id="password" type="password" placeholder="••••••••" autocomplete="current-password"/></div>
-    <button class="btn" id="btn" onclick="doLogin()">Sign In</button>
-    <div class="foot">No account? <a href="/auth/register">Register</a></div>
+<div id="canvas-container"></div>
+<div class="particle-bg"></div>
+
+<div class="top-nav">
+  <div class="logo-area">
+    <div class="newsdesk-logo">NewsDesk</div>
+    <div class="brand-text">AI Neural Intelligence <span class="ai-badge">⚡ DEEP LEARNING</span></div>
+  </div>
+  <div class="right-stats">
+    <div class="live-badge"><div class="live-dot"></div> NEURAL LIVE</div>
+    <div class="market-chip up">NIFTY ▲ 0.68%</div>
+    <div class="market-chip dn">GOLD ▼ 0.09%</div>
+    <div id="liveClock">--:-- IST</div>
   </div>
 </div>
+
+<div class="login-wrapper">
+  <div class="login-card">
+    <div class="card-accent"></div>
+    <div class="welcome-title">NewsDesk <span class="ai-highlight">Neural</span><br>Cognitive Hub</div>
+    <div class="card-sub"><span>🤖 AI-Powered Market Cognition</span> <span class="ai-chip">GPT-6 • Real-time</span></div>
+
+    <div class="breaking-module">
+      <div class="breaking-header"><div class="live-dot"></div><span>🧠 NEURAL INSIGHT • BREAKING ALERT</span></div>
+      <div class="breaking-track" id="breakingTrack"></div>
+    </div>
+
+    <div class="market-dashboard" id="marketDashboard">
+      <div class="market-tile"><div class="tile-label">NIFTY 50</div><div class="tile-value">25,842</div><div class="tile-change up">▲ 0.68%</div></div>
+      <div class="market-tile"><div class="tile-label">SENSEX</div><div class="tile-value">84,756</div><div class="tile-change up">▲ 0.73%</div></div>
+      <div class="market-tile"><div class="tile-label">GOLD</div><div class="tile-value">₹74,520</div><div class="tile-change down">▼ 0.09%</div></div>
+      <div class="market-tile"><div class="tile-label">BTC</div><div class="tile-value">$71,280</div><div class="tile-change up">▲ 3.2%</div></div>
+    </div>
+
+    <div id="alertMessage" class="alert-message"></div>
+
+    <div class="input-field">
+      <input type="text" id="username" placeholder=" " autocomplete="username">
+      <label>Username / ET ID</label>
+    </div>
+    <div class="input-field">
+      <input type="password" id="password" placeholder=" " autocomplete="current-password">
+      <label>Password</label>
+    </div>
+
+    <button class="login-btn" id="loginButton">
+      <span class="btn-ripple"></span>
+      <span id="btnText">🚀 Launch Neural Dashboard</span>
+    </button>
+
+    <div class="card-footer-links">
+      <div>✨ New to NewsDesk? <a href="/auth/register">Create AI Account →</a></div>
+      <div class="ai-footer-badge">⚡ Neural Engine v4.2 • Quantum Ready</div>
+    </div>
+  </div>
+</div>
+
+<div class="ticker-bar">
+  <div class="ticker-label"><span>🧠</span> NEURAL MARKET STREAM</div>
+  <div class="ticker-scroll"><div class="ticker-items" id="tickerItems"></div></div>
+</div>
+
+<div id="countryTooltip" class="country-tooltip"><div class="tooltip-card" id="tooltipInner"></div></div>
+
+<div class="music-control" id="musicControl">
+  <span class="music-icon">🎵</span>
+  <span id="musicStatus">Ambient Neural</span>
+  <span id="musicToggle">🔊</span>
+</div>
+
 <script>
-async function doLogin(){
-  const btn=document.getElementById('btn');
-  const err=document.getElementById('err');
-  const ok=document.getElementById('ok');
-  err.style.display='none'; ok.style.display='none';
-  const username=document.getElementById('username').value.trim();
-  const password=document.getElementById('password').value;
-  if(!username||!password){err.textContent='Please fill in all fields.';err.style.display='block';return}
-  btn.disabled=true;btn.textContent='Signing in…';
-  try{
-    const r=await fetch('/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,password})});
-    const d=await r.json();
-    if(!r.ok){err.textContent=d.detail||'Login failed.';err.style.display='block';return}
-    localStorage.setItem('access_token',d.access_token);
-    localStorage.setItem('username',d.username);
-    ok.textContent='Login successful! Redirecting…';ok.style.display='block';
-    setTimeout(()=>window.location.href=d.is_admin?'/admin/stats':(d.preferences_set?'/dashboard/':'/preferences/setup'),800);
-  }catch(e){err.textContent='Network error.';err.style.display='block';}
-  finally{btn.disabled=false;btn.textContent='Sign In'}
+// ========== SOOTHING AMBIENT MUSIC ==========
+let audioContext = null;
+let isMusicPlaying = false;
+let musicSource = null;
+let musicGain = null;
+
+function createAmbientMusic() {
+  if (audioContext) return;
+  
+  audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  musicGain = audioContext.createGain();
+  musicGain.gain.value = 0.35;
+  musicGain.connect(audioContext.destination);
+  
+  const osc1 = audioContext.createOscillator();
+  osc1.type = 'sine';
+  osc1.frequency.value = 55.0;
+  const gain1 = audioContext.createGain();
+  gain1.gain.value = 0.25;
+  osc1.connect(gain1);
+  gain1.connect(musicGain);
+  osc1.start();
+  
+  const osc2 = audioContext.createOscillator();
+  osc2.type = 'sine';
+  osc2.frequency.value = 82.5;
+  const gain2 = audioContext.createGain();
+  gain2.gain.value = 0.2;
+  osc2.connect(gain2);
+  gain2.connect(musicGain);
+  osc2.start();
+  
+  const osc3 = audioContext.createOscillator();
+  osc3.type = 'triangle';
+  osc3.frequency.value = 164.8;
+  const gain3 = audioContext.createGain();
+  gain3.gain.value = 0.12;
+  osc3.connect(gain3);
+  gain3.connect(musicGain);
+  osc3.start();
+  
+  const lfo = audioContext.createOscillator();
+  lfo.type = 'sine';
+  lfo.frequency.value = 0.15;
+  const lfoGain = audioContext.createGain();
+  lfoGain.gain.value = 8;
+  lfo.connect(lfoGain);
+  lfoGain.connect(osc1.frequency);
+  lfo.start();
+  
+  const lfo2 = audioContext.createOscillator();
+  lfo2.type = 'sine';
+  lfo2.frequency.value = 0.22;
+  const lfoGain2 = audioContext.createGain();
+  lfoGain2.gain.value = 12;
+  lfo2.connect(lfoGain2);
+  lfoGain2.connect(osc2.frequency);
+  lfo2.start();
+  
+  musicSource = { osc1, osc2, osc3, lfo, lfo2, gain1, gain2, gain3 };
 }
-document.addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+
+function startMusic() {
+  if (!audioContext) createAmbientMusic();
+  if (audioContext && !isMusicPlaying) {
+    if (audioContext.state === 'suspended') audioContext.resume();
+    if (musicGain) musicGain.gain.setValueAtTime(0.35, audioContext.currentTime);
+    isMusicPlaying = true;
+    document.getElementById('musicToggle').innerHTML = '🔇';
+    document.getElementById('musicStatus').innerHTML = 'Playing';
+  }
+}
+
+function stopMusic() {
+  if (audioContext && musicGain && isMusicPlaying) {
+    musicGain.gain.setValueAtTime(0, audioContext.currentTime);
+    isMusicPlaying = false;
+    document.getElementById('musicToggle').innerHTML = '🔊';
+    document.getElementById('musicStatus').innerHTML = 'Ambient Neural';
+  }
+}
+
+function toggleMusic() {
+  isMusicPlaying ? stopMusic() : startMusic();
+}
+
+document.getElementById('musicControl').addEventListener('click', toggleMusic);
+
+function autoStartMusic() {
+  startMusic();
+  document.removeEventListener('click', autoStartMusic);
+  document.removeEventListener('keydown', autoStartMusic);
+}
+document.addEventListener('click', autoStartMusic);
+document.addEventListener('keydown', autoStartMusic);
+
+// ========== BACKEND LOGIN (COMPLETELY UNTOUCHED) ==========
+async function handleLogin() {
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value;
+  const alertBox = document.getElementById('alertMessage');
+  const btn = document.getElementById('loginButton');
+  const btnText = document.getElementById('btnText');
+  
+  alertBox.style.display = 'none';
+  
+  if (!username || !password) {
+    alertBox.className = 'alert-message alert-error';
+    alertBox.innerText = 'Please enter your credentials.';
+    alertBox.style.display = 'block';
+    return;
+  }
+  
+  btn.disabled = true;
+  btnText.innerHTML = 'Authenticating... ⟳';
+  
+  try {
+    const response = await fetch('/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await response.json();
+    
+    if (!response.ok) {
+      alertBox.className = 'alert-message alert-error';
+      alertBox.innerText = data.detail || 'Invalid credentials.';
+      alertBox.style.display = 'block';
+      return;
+    }
+    
+    localStorage.setItem('access_token', data.access_token);
+    localStorage.setItem('username', data.username);
+    
+    alertBox.className = 'alert-message alert-success';
+    alertBox.innerText = 'Access granted! Redirecting to NewsDesk AI...';
+    alertBox.style.display = 'block';
+    
+    setTimeout(() => {
+      window.location.href = data.is_admin ? '/admin/stats' : (data.preferences_set ? '/dashboard/' : '/preferences/setup');
+    }, 800);
+  } catch (err) {
+    alertBox.className = 'alert-message alert-error';
+    alertBox.innerText = 'Network error. Please try again.';
+    alertBox.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btnText.innerHTML = '🚀 Launch Neural Dashboard';
+  }
+}
+
+document.getElementById('loginButton').addEventListener('click', handleLogin);
+document.addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });
+
+// Live Clock
+function updateClock() {
+  const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+  document.getElementById('liveClock').innerText = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' IST';
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+// Dynamic Ticker
+const tickerData = [
+  { n: 'NIFTY 50', v: '25,842', ch: '+0.68%', u: 1 }, { n: 'SENSEX', v: '84,756', ch: '+0.73%', u: 1 },
+  { n: 'BANK NIFTY', v: '53,980', ch: '+0.91%', u: 1 }, { n: 'GOLD', v: '₹74,520', ch: '-0.09%', u: 0 },
+  { n: 'BRENT', v: '$86.90', ch: '-0.32%', u: 0 }, { n: 'BTC', v: '$71,280', ch: '+3.2%', u: 1 },
+  { n: 'NASDAQ', v: '18,890', ch: '+1.02%', u: 1 }, { n: 'DAX', v: '19,120', ch: '+0.67%', u: 1 }
+];
+const tickerContainer = document.getElementById('tickerItems');
+let tickerHTML = '';
+tickerData.forEach(d => {
+  tickerHTML += `<span class="ticker-item"><span>${d.n}</span><span>${d.v}</span><span style="color:${d.u ? '#2F9B7A' : '#E67E22'}">${d.ch}</span></span>`;
+});
+tickerContainer.innerHTML = tickerHTML + tickerHTML;
+
+// AI Neural Breaking News
+const neuralNews = [
+  '🧠 NewsDesk AI: Nifty neural forecast indicates 26,200 by May — bullish momentum',
+  '📊 Deep Learning Signal: Banking sector accumulation detected, upside potential 12%',
+  '🌍 Global AI Analysis: 3 rate cuts priced in for 2026, EM rally accelerating',
+  '⭐ Neural Alpha: Gold breakout pattern confirmed, target ₹76,800',
+  '🚀 NewsDesk Cognitive: India GDP neural model revises upward to 7.9%'
+];
+const trackDiv = document.getElementById('breakingTrack');
+let activeIdx = 0;
+neuralNews.forEach((news, i) => {
+  const div = document.createElement('div');
+  div.className = 'breaking-item' + (i === 0 ? ' active' : '');
+  div.textContent = news;
+  trackDiv.appendChild(div);
+});
+setInterval(() => {
+  const items = document.querySelectorAll('.breaking-item');
+  items[activeIdx].classList.remove('active');
+  activeIdx = (activeIdx + 1) % items.length;
+  items[activeIdx].classList.add('active');
+}, 4800);
+
+// ========== 3D GLOBE ==========
+const container = document.getElementById('canvas-container');
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xFEF7E8);
+scene.fog = new THREE.FogExp2(0xFEF7E8, 0.0008);
+
+const camera = new THREE.PerspectiveCamera(38, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.set(0, 0.3, 9.5);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+container.appendChild(renderer.domElement);
+
+const globeRadius = 3.2;
+const canvasTex = document.createElement('canvas');
+canvasTex.width = 2048;
+canvasTex.height = 1024;
+const ctxTex = canvasTex.getContext('2d');
+ctxTex.fillStyle = '#FCF3E0';
+ctxTex.fillRect(0, 0, canvasTex.width, canvasTex.height);
+ctxTex.fillStyle = '#E5B83C';
+ctxTex.globalAlpha = 0.3;
+for (let i = 0; i < 2000; i++) {
+  ctxTex.beginPath();
+  ctxTex.arc(Math.random() * canvasTex.width, Math.random() * canvasTex.height, 1.8 + Math.random() * 4, 0, Math.PI*2);
+  ctxTex.fill();
+}
+ctxTex.fillStyle = '#2F9B7A';
+ctxTex.globalAlpha = 0.2;
+for (let i = 0; i < 1000; i++) {
+  ctxTex.fillRect(Math.random() * canvasTex.width, Math.random() * canvasTex.height, 3, 3);
+}
+const globeTexture = new THREE.CanvasTexture(canvasTex);
+
+const globeGeometry = new THREE.SphereGeometry(globeRadius, 180, 180);
+const globeMaterial = new THREE.MeshStandardMaterial({
+  map: globeTexture,
+  roughness: 0.22,
+  metalness: 0.58,
+  emissive: 0xE5B83C,
+  emissiveIntensity: 0.09
+});
+const globe = new THREE.Mesh(globeGeometry, globeMaterial);
+scene.add(globe);
+
+const neuralRing1 = new THREE.Mesh(new THREE.TorusGeometry(globeRadius + 0.22, 0.016, 180, 600), new THREE.MeshStandardMaterial({ color: 0xE5B83C, emissive: 0xE5B83C, emissiveIntensity: 0.5 }));
+neuralRing1.rotation.x = Math.PI / 2.15;
+neuralRing1.rotation.z = 0.6;
+scene.add(neuralRing1);
+
+const neuralRing2 = new THREE.Mesh(new THREE.TorusGeometry(globeRadius + 0.48, 0.012, 180, 600), new THREE.MeshStandardMaterial({ color: 0x2F9B7A, emissive: 0x1E6B55, emissiveIntensity: 0.4, transparent: true, opacity: 0.8 }));
+neuralRing2.rotation.x = Math.PI / 2.6;
+neuralRing2.rotation.z = -0.4;
+scene.add(neuralRing2);
+
+const partCount = 3800;
+const partGeo = new THREE.BufferGeometry();
+const partPositions = [];
+for (let i = 0; i < partCount; i++) {
+  const r = globeRadius + 0.35 + Math.random() * 1.2;
+  const theta = Math.random() * Math.PI * 2;
+  const phi = Math.acos(2 * Math.random() - 1);
+  partPositions.push(r * Math.sin(phi) * Math.cos(theta), r * Math.sin(phi) * Math.sin(theta), r * Math.cos(phi));
+}
+partGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(partPositions), 3));
+const partMat = new THREE.PointsMaterial({ color: 0xE5B83C, size: 0.022, transparent: true, opacity: 0.55 });
+const aiParticles = new THREE.Points(partGeo, partMat);
+scene.add(aiParticles);
+
+const starsGeo = new THREE.BufferGeometry();
+const starsPos = [];
+for (let i = 0; i < 2500; i++) {
+  starsPos.push((Math.random() - 0.5) * 500);
+  starsPos.push((Math.random() - 0.5) * 280);
+  starsPos.push((Math.random() - 0.5) * 120 - 60);
+}
+starsGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(starsPos), 3));
+const starsMat = new THREE.PointsMaterial({ color: 0xE5B83C, size: 0.09, transparent: true, opacity: 0.4 });
+const starsField = new THREE.Points(starsGeo, starsMat);
+scene.add(starsField);
+
+const ambient = new THREE.AmbientLight(0xE8DCC8);
+scene.add(ambient);
+const mainLight = new THREE.DirectionalLight(0xFFF5E6, 1.2);
+mainLight.position.set(6, 7, 5);
+scene.add(mainLight);
+const backLightGold = new THREE.PointLight(0xE5B83C, 0.8);
+backLightGold.position.set(0, 1.8, -6.5);
+scene.add(backLightGold);
+
+const globalMarkers = [
+  { name: 'Mumbai', flag: '🇮🇳', lat: 19.07, lon: 72.87, headline: 'Neural Buy Signal: Nifty breakout confirmed', cat: 'STRONG BUY' },
+  { name: 'New York', flag: '🇺🇸', lat: 40.71, lon: -74.00, headline: 'AI Forecast: S&P 500 target 6,200', cat: 'BULLISH' },
+  { name: 'London', flag: '🇬🇧', lat: 51.50, lon: -0.12, headline: 'Neural accumulation detected in FTSE', cat: 'ACCUMULATE' },
+  { name: 'Tokyo', flag: '🇯🇵', lat: 35.68, lon: 139.76, headline: 'Nikkei neural sentiment: Overweight', cat: 'OVERWEIGHT' },
+  { name: 'Frankfurt', flag: '🇩🇪', lat: 50.11, lon: 8.68, headline: 'DAX momentum indicator flashing green', cat: 'MOMENTUM' },
+  { name: 'Singapore', flag: '🇸🇬', lat: 1.35, lon: 103.81, headline: 'SGX Neural: 500-point upside forecast', cat: 'ALERT' },
+  { name: 'Dubai', flag: '🇦🇪', lat: 25.20, lon: 55.27, headline: 'Real estate neural index up 22%', cat: 'GROWTH' },
+  { name: 'Shanghai', flag: '🇨🇳', lat: 31.23, lon: 121.47, headline: 'Neural: Stimulus to boost EM flows', cat: 'EMERGING' }
+];
+
+const markers = [];
+globalMarkers.forEach(m => {
+  const phi = (90 - m.lat) * Math.PI / 180;
+  const theta = m.lon * Math.PI / 180;
+  const r = globeRadius + 0.07;
+  const x = r * Math.sin(phi) * Math.cos(theta);
+  const y = r * Math.cos(phi);
+  const z = r * Math.sin(phi) * Math.sin(theta);
+  const markerMat = new THREE.MeshStandardMaterial({ color: 0xE67E22, emissive: 0xE5B83C, emissiveIntensity: 0.6 });
+  const markerMesh = new THREE.Mesh(new THREE.SphereGeometry(0.058, 32, 32), markerMat);
+  markerMesh.position.set(x, y, z);
+  markerMesh.userData = { country: m };
+  scene.add(markerMesh);
+  markers.push(markerMesh);
+  
+  const glowRing = new THREE.Mesh(new THREE.SphereGeometry(0.095, 24, 24), new THREE.MeshBasicMaterial({ color: 0xE5B83C, transparent: true, opacity: 0.5 }));
+  glowRing.position.set(x, y, z);
+  scene.add(glowRing);
+});
+
+let targetRotY = 0;
+let currentRotY = 0;
+document.addEventListener('mousemove', (e) => {
+  targetRotY = ((e.clientX / window.innerWidth) * 2 - 1) * 0.9;
+});
+
+const raycaster = new THREE.Raycaster();
+const mouseVec = new THREE.Vector2();
+renderer.domElement.addEventListener('click', (event) => {
+  mouseVec.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
+  mouseVec.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
+  raycaster.setFromCamera(mouseVec, camera);
+  const intersects = raycaster.intersectObjects(markers);
+  if (intersects.length) {
+    const data = intersects[0].object.userData.country;
+    const tooltip = document.getElementById('countryTooltip');
+    const inner = document.getElementById('tooltipInner');
+    inner.innerHTML = `
+      <div style="font-size:2.2rem; margin-bottom:8px;">${data.flag}</div>
+      <div style="font-weight:800; font-size:1.1rem; color:#0A2A38;">${data.name}</div>
+      <div style="font-size:0.7rem; text-transform:uppercase; color:#E5B83C; letter-spacing:1.5px; margin:8px 0;">🧠 NEURAL SIGNAL: ${data.cat}</div>
+      <div style="font-size:0.8rem; color:#1F2E2A; margin:10px 0; line-height:1.4;">${data.headline}</div>
+      <button style="background:linear-gradient(95deg,#0A2A38,#2F9B7A); border:none; border-radius:40px; padding:10px; width:100%; font-weight:700; color:white; cursor:pointer;" onclick="closeTooltip()">AI Deep Analysis →</button>
+    `;
+    tooltip.style.left = (event.clientX + 20) + 'px';
+    tooltip.style.top = (event.clientY - 120) + 'px';
+    tooltip.classList.add('show');
+    setTimeout(() => tooltip.classList.remove('show'), 6000);
+  }
+});
+window.closeTooltip = () => document.getElementById('countryTooltip').classList.remove('show');
+
+let time = 0;
+function animateScene() {
+  time += 0.006;
+  currentRotY += (targetRotY - currentRotY) * 0.07;
+  globe.rotation.y = currentRotY;
+  neuralRing1.rotation.z += 0.002;
+  neuralRing2.rotation.x += 0.0018;
+  aiParticles.rotation.y = currentRotY * 0.3;
+  
+  camera.position.x += (0 - camera.position.x) * 0.04;
+  camera.position.y += (Math.sin(time * 0.5) * 0.008 - camera.position.y) * 0.02;
+  camera.lookAt(0, 0.1, 0);
+  
+  renderer.render(scene, camera);
+  requestAnimationFrame(animateScene);
+}
+animateScene();
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
 </script>
 </body>
 </html>

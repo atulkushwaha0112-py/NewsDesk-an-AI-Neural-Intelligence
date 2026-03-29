@@ -145,7 +145,7 @@ body {
 .steps-container {
   position: relative;
   z-index: 10;
-  max-width: 860px;
+  max-width: 900px;
   margin: 110px auto 20px;
   padding: 0 20px;
 }
@@ -203,20 +203,14 @@ body {
 .main-card {
   position: relative;
   z-index: 10;
-  max-width: 860px;
+  max-width: 900px;
   margin: 0 auto;
   background: rgba(255, 251, 240, 0.94);
   backdrop-filter: blur(28px);
   border-radius: 48px;
   border: 1px solid rgba(229, 184, 60, 0.5);
   padding: 40px;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(229, 184, 60, 0.1) inset;
-  animation: cardFloat 4s ease-in-out infinite;
-}
-
-@keyframes cardFloat {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-6px); }
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.08);
 }
 
 .page-title {
@@ -374,87 +368,157 @@ textarea:focus {
   color: var(--et-teal);
 }
 
-/* Category Groups */
-.group-block {
-  margin-bottom: 28px;
+/* ========== ACCORDION CATEGORY DESIGN ========== */
+.accordion-container {
+  margin-top: 10px;
 }
 
-.group-header {
+.accordion-item {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  border-radius: 20px;
+  margin-bottom: 12px;
+  border: 1px solid rgba(229, 184, 60, 0.2);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.accordion-item:hover {
+  border-color: rgba(229, 184, 60, 0.5);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.accordion-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  padding: 16px 20px;
+  cursor: pointer;
+  user-select: none;
 }
 
-.group-label {
+.accordion-header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.accordion-icon {
+  font-size: 1.6rem;
+  width: 40px;
+  text-align: center;
+}
+
+.accordion-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--et-primary);
+}
+
+.accordion-count {
   font-size: 0.7rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--et-gold);
-  background: rgba(229, 184, 60, 0.1);
-  padding: 4px 12px;
+  background: rgba(47, 155, 122, 0.15);
+  padding: 2px 10px;
   border-radius: 30px;
+  color: var(--et-teal);
+  margin-left: 10px;
 }
 
-.select-all {
+.accordion-header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.accordion-select-all {
   font-size: 0.7rem;
   color: var(--et-teal);
   background: none;
-  border: none;
+  border: 1px solid rgba(47, 155, 122, 0.3);
+  padding: 4px 12px;
+  border-radius: 30px;
   cursor: pointer;
   font-weight: 600;
-  transition: color 0.2s;
+  transition: all 0.2s;
 }
 
-.select-all:hover {
+.accordion-select-all:hover {
+  background: var(--et-teal);
+  color: white;
+  border-color: var(--et-teal);
+}
+
+.accordion-arrow {
+  font-size: 1.2rem;
   color: var(--et-gold);
+  transition: transform 0.3s ease;
 }
 
-.chips {
+.accordion-item.open .accordion-arrow {
+  transform: rotate(180deg);
+}
+
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  padding: 0 20px;
+}
+
+.accordion-item.open .accordion-content {
+  max-height: 500px;
+  padding: 0 20px 20px 20px;
+}
+
+.subcategory-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  padding-top: 8px;
 }
 
-.chip {
-  position: relative;
-  padding: 8px 18px;
-  border-radius: 40px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  border: 1px solid rgba(229, 184, 60, 0.3);
-  background: white;
-  color: var(--et-mid);
-  transition: all 0.2s;
+.subcategory-chip {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  padding: 8px 16px;
+  background: white;
+  border: 1px solid rgba(229, 184, 60, 0.25);
+  border-radius: 40px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--et-mid);
 }
 
-.chip:hover {
-  border-color: var(--et-gold);
+.subcategory-chip:hover {
   transform: translateY(-2px);
+  border-color: var(--et-gold);
+  box-shadow: 0 4px 12px rgba(229, 184, 60, 0.15);
 }
 
-.chip.liked {
+.subcategory-chip.selected {
+  background: linear-gradient(135deg, rgba(47, 155, 122, 0.15), rgba(47, 155, 122, 0.05));
   border-color: var(--et-teal);
-  background: rgba(47, 155, 122, 0.1);
   color: var(--et-teal);
 }
 
-.chip .ai-dot {
+.subcategory-chip .chip-icon {
+  font-size: 0.9rem;
+}
+
+.subcategory-chip .ai-suggested-dot {
   width: 6px;
   height: 6px;
-  border-radius: 50%;
   background: var(--et-gold);
+  border-radius: 50%;
   display: none;
   box-shadow: 0 0 4px var(--et-gold);
 }
 
-.chip.ai-matched .ai-dot {
-  display: block;
+.subcategory-chip.ai-suggested .ai-suggested-dot {
+  display: inline-block;
 }
 
 /* Bottom Bar */
@@ -483,6 +547,7 @@ textarea:focus {
 .count-item span {
   font-weight: 800;
   color: var(--et-gold);
+  font-size: 1.2rem;
 }
 
 .bar-right {
@@ -543,7 +608,6 @@ textarea:focus {
   to { transform: rotate(360deg); }
 }
 
-/* Music Control */
 .music-control {
   position: fixed;
   bottom: 100px;
@@ -605,27 +669,28 @@ textarea:focus {
   <div class="ai-box">
     <h3>🤖 Describe Yourself <span class="ai-badge">AI-Powered</span></h3>
     <p>Write about your profession, interests, or investment style. Our AI will suggest relevant categories automatically.</p>
-    <textarea id="userDescription" placeholder="Example: I'm a fintech professional passionate about Indian equities, crypto markets, and sustainable investing. I follow RBI policy and global macroeconomic trends..."></textarea>
+    <textarea id="userDescription" placeholder="Example: I'm a fintech professional passionate about Indian equities, crypto markets, and sustainable investing..."></textarea>
   </div>
 
   <div class="section-divider">
     <div class="line"></div>
-    <div class="label">Or Pick Categories Manually</div>
+    <div class="label">✨ Select Your Interests</div>
     <div class="line"></div>
   </div>
 
   <div class="instructions">
-    <span>✨ <strong>Click</strong> to select / deselect categories</span>
+    <span>📂 <strong>Click</strong> on any category to expand</span>
+    <span>✅ <strong>Click</strong> on subcategories to select</span>
+    <span>🎯 <strong>Select All</strong> for each category</span>
     <span>🌟 <strong style="color:var(--et-gold)">● Gold dot</strong> = AI suggested</span>
-    <span>🎯 <strong>Select all</strong> for each group</span>
   </div>
 
-  <div id="categoriesContainer"></div>
+  <div id="accordionContainer" class="accordion-container"></div>
 </div>
 
 <div class="bottom-bar">
   <div class="counts">
-    <div class="count-item">Selected: <span id="selectedCount">0</span> categories</div>
+    <div class="count-item">✨ Selected Interests: <span id="selectedCount">0</span></div>
   </div>
   <div class="bar-right">
     <button class="skip-btn" onclick="skipPreferences()">Skip for now</button>
@@ -736,87 +801,150 @@ const ALL_CATEGORIES = {{ all_categories | tojson }};
 let selectedState = {};
 let aiSuggestedCategories = [];
 
-function buildCategoriesUI() {
-  const container = document.getElementById('categoriesContainer');
+// Category Icons Mapping
+const categoryIcons = {
+  'Markets': '📈', 'Economy': '🏦', 'Technology': '💻', 'Finance': '💰',
+  'IPO': '🚀', 'Stocks': '📉', 'Crypto': '₿', 'Real Estate': '🏠',
+  'Mutual Funds': '📊', 'Commodities': '⛽', 'Startups': '✨',
+  'International': '🌍', 'Politics': '🏛️', 'Business': '💼',
+  'default': '📰'
+};
+
+function getCategoryIcon(groupName) {
+  for (const [key, icon] of Object.entries(categoryIcons)) {
+    if (groupName.includes(key)) return icon;
+  }
+  return categoryIcons.default;
+}
+
+// Build Accordion UI
+function buildAccordion() {
+  const container = document.getElementById('accordionContainer');
   if (!container) return;
   container.innerHTML = '';
   
+  let groupIndex = 0;
   for (const [groupName, categoryKeys] of Object.entries(CATEGORY_GROUPS)) {
-    const groupDiv = document.createElement('div');
-    groupDiv.className = 'group-block';
+    const groupId = `accordion-${groupIndex}`;
+    const icon = getCategoryIcon(groupName);
+    const selectedInGroup = categoryKeys.filter(key => selectedState[key]).length;
+    const totalInGroup = categoryKeys.length;
     
-    const headerDiv = document.createElement('div');
-    headerDiv.className = 'group-header';
+    const accordionItem = document.createElement('div');
+    accordionItem.className = 'accordion-item';
+    accordionItem.setAttribute('data-group', groupName);
     
-    const labelSpan = document.createElement('span');
-    labelSpan.className = 'group-label';
-    labelSpan.textContent = groupName;
+    accordionItem.innerHTML = `
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-header-left">
+          <div class="accordion-icon">${icon}</div>
+          <div class="accordion-title">${groupName}</div>
+          <div class="accordion-count">${selectedInGroup}/${totalInGroup} selected</div>
+        </div>
+        <div class="accordion-header-right">
+          <button class="accordion-select-all" onclick="event.stopPropagation(); selectAllInGroup('${groupName}')">Select All</button>
+          <div class="accordion-arrow">▼</div>
+        </div>
+      </div>
+      <div class="accordion-content">
+        <div class="subcategory-grid" id="subgrid-${groupName.replace(/\s/g, '')}"></div>
+      </div>
+    `;
     
-    const selectAllBtn = document.createElement('button');
-    selectAllBtn.className = 'select-all';
-    selectAllBtn.textContent = 'Select all';
-    selectAllBtn.onclick = () => selectAllInGroup(categoryKeys);
+    container.appendChild(accordionItem);
     
-    headerDiv.appendChild(labelSpan);
-    headerDiv.appendChild(selectAllBtn);
+    // Build subcategories grid
+    const subgrid = document.getElementById(`subgrid-${groupName.replace(/\s/g, '')}`);
+    if (subgrid) {
+      categoryKeys.forEach(key => {
+        if (selectedState[key] === undefined) selectedState[key] = false;
+        
+        const chip = document.createElement('div');
+        chip.className = 'subcategory-chip';
+        if (selectedState[key]) chip.classList.add('selected');
+        if (aiSuggestedCategories.includes(key)) chip.classList.add('ai-suggested');
+        chip.setAttribute('data-key', key);
+        
+        chip.innerHTML = `
+          <span class="chip-icon">${icon}</span>
+          <span class="ai-suggested-dot"></span>
+          <span>${ALL_CATEGORIES[key] || key}</span>
+        `;
+        
+        chip.onclick = () => toggleCategory(key, chip);
+        subgrid.appendChild(chip);
+      });
+    }
     
-    const chipsDiv = document.createElement('div');
-    chipsDiv.className = 'chips';
-    
-    categoryKeys.forEach(key => {
-      if (selectedState[key] === undefined) selectedState[key] = false;
-      
-      const chip = document.createElement('div');
-      chip.className = 'chip';
-      if (selectedState[key]) chip.classList.add('liked');
-      if (aiSuggestedCategories.includes(key)) chip.classList.add('ai-matched');
-      chip.setAttribute('data-key', key);
-      
-      const dot = document.createElement('div');
-      dot.className = 'ai-dot';
-      
-      chip.appendChild(dot);
-      chip.appendChild(document.createTextNode(ALL_CATEGORIES[key] || key));
-      chip.onclick = () => toggleCategory(key);
-      
-      chipsDiv.appendChild(chip);
-    });
-    
-    groupDiv.appendChild(headerDiv);
-    groupDiv.appendChild(chipsDiv);
-    container.appendChild(groupDiv);
+    groupIndex++;
   }
   updateSelectedCount();
 }
 
-function toggleCategory(key) {
+function toggleAccordion(headerElement) {
+  const accordionItem = headerElement.closest('.accordion-item');
+  accordionItem.classList.toggle('open');
+}
+
+function toggleCategory(key, chipElement) {
   selectedState[key] = !selectedState[key];
-  updateChipUI(key);
+  
+  if (chipElement) {
+    if (selectedState[key]) {
+      chipElement.classList.add('selected');
+    } else {
+      chipElement.classList.remove('selected');
+    }
+  }
+  
+  // Update category counts
+  updateCategoryCounts();
   updateSelectedCount();
+  
+  // Animate count
+  const countSpan = document.getElementById('selectedCount');
+  countSpan.style.transform = 'scale(1.2)';
+  setTimeout(() => { countSpan.style.transform = 'scale(1)'; }, 200);
 }
 
-function updateChipUI(key) {
-  const chip = document.querySelector(`.chip[data-key="${key}"]`);
-  if (chip) {
-    if (selectedState[key]) {
-      chip.classList.add('liked');
-    } else {
-      chip.classList.remove('liked');
-    }
-    if (aiSuggestedCategories.includes(key)) {
-      chip.classList.add('ai-matched');
-    } else {
-      chip.classList.remove('ai-matched');
+function updateCategoryCounts() {
+  for (const [groupName, categoryKeys] of Object.entries(CATEGORY_GROUPS)) {
+    const selectedCount = categoryKeys.filter(key => selectedState[key]).length;
+    const totalCount = categoryKeys.length;
+    
+    // Find the accordion item for this group
+    const accordionItems = document.querySelectorAll('.accordion-item');
+    for (const item of accordionItems) {
+      const header = item.querySelector('.accordion-header-left');
+      if (header && header.querySelector('.accordion-title')?.textContent === groupName) {
+        const countBadge = header.querySelector('.accordion-count');
+        if (countBadge) {
+          countBadge.textContent = `${selectedCount}/${totalCount} selected`;
+        }
+        break;
+      }
     }
   }
 }
 
-function selectAllInGroup(keys) {
-  keys.forEach(key => {
+function selectAllInGroup(groupName) {
+  const categoryKeys = CATEGORY_GROUPS[groupName];
+  if (!categoryKeys) return;
+  
+  categoryKeys.forEach(key => {
     selectedState[key] = true;
-    updateChipUI(key);
+    // Update chip UI
+    const chip = document.querySelector(`.subcategory-chip[data-key="${key}"]`);
+    if (chip) chip.classList.add('selected');
   });
+  
+  updateCategoryCounts();
   updateSelectedCount();
+  
+  // Visual feedback
+  const countSpan = document.getElementById('selectedCount');
+  countSpan.style.transform = 'scale(1.2)';
+  setTimeout(() => { countSpan.style.transform = 'scale(1)'; }, 200);
 }
 
 function updateSelectedCount() {
@@ -874,7 +1002,7 @@ async function savePreferences() {
       return;
     }
     
-    successAlert.textContent = `✓ Saved! ${data.liked_categories?.length || selectedCategories.length} categories configured. Redirecting to dashboard...`;
+    successAlert.textContent = `✓ Saved! ${data.liked_categories?.length || selectedCategories.length} categories configured. Redirecting...`;
     successAlert.style.display = 'block';
     
     setTimeout(() => {
@@ -895,9 +1023,9 @@ function skipPreferences() {
   }
 }
 
-buildCategoriesUI();
+buildAccordion();
 
-// ========== 3D ROTATING GLOBE ==========
+// ========== 3D ROTATING GLOBE BACKGROUND ==========
 const container = document.getElementById('canvas-container');
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xFEF7E8);
@@ -911,7 +1039,6 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 container.appendChild(renderer.domElement);
 
-// Premium Globe Texture
 const globeRadius = 3.3;
 const canvasTex = document.createElement('canvas');
 canvasTex.width = 2048;
@@ -944,7 +1071,6 @@ const globeMaterial = new THREE.MeshStandardMaterial({
 const globe = new THREE.Mesh(globeGeometry, globeMaterial);
 scene.add(globe);
 
-// Decorative Rings
 const ring1 = new THREE.Mesh(new THREE.TorusGeometry(globeRadius + 0.22, 0.016, 160, 500), new THREE.MeshStandardMaterial({ color: 0xE5B83C, emissive: 0xE5B83C, emissiveIntensity: 0.45 }));
 ring1.rotation.x = Math.PI / 2.2;
 ring1.rotation.z = 0.55;
@@ -955,7 +1081,6 @@ ring2.rotation.x = Math.PI / 2.7;
 ring2.rotation.z = -0.4;
 scene.add(ring2);
 
-// Floating Particles
 const partCount = 3800;
 const partGeo = new THREE.BufferGeometry();
 const partPositions = [];
@@ -970,7 +1095,6 @@ const partMat = new THREE.PointsMaterial({ color: 0xE5B83C, size: 0.02, transpar
 const particles = new THREE.Points(partGeo, partMat);
 scene.add(particles);
 
-// Starfield Background
 const starsGeo = new THREE.BufferGeometry();
 const starsPos = [];
 for (let i = 0; i < 2500; i++) {
@@ -983,7 +1107,6 @@ const starsMat = new THREE.PointsMaterial({ color: 0xE5B83C, size: 0.085, transp
 const starsField = new THREE.Points(starsGeo, starsMat);
 scene.add(starsField);
 
-// Lighting
 const ambient = new THREE.AmbientLight(0xE8DCC8);
 scene.add(ambient);
 const mainLight = new THREE.DirectionalLight(0xFFF5E6, 1.1);
@@ -996,14 +1119,12 @@ const fillLight = new THREE.PointLight(0x2F9B7A, 0.4);
 fillLight.position.set(-3, 2, 5);
 scene.add(fillLight);
 
-// Mouse Interaction for Globe Rotation
 let targetRotY = 0;
 let currentRotY = 0;
 document.addEventListener('mousemove', (e) => {
   targetRotY = ((e.clientX / window.innerWidth) * 2 - 1) * 0.8;
 });
 
-// Animation Loop
 let animTime = 0;
 function animateScene() {
   animTime += 0.005;

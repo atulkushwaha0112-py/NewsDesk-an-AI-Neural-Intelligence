@@ -186,14 +186,15 @@ body {
   letter-spacing: 0.5px;
 }
 
-/* Main Card - Holographic Premium */
+/* ===== REDESIGNED LOGIN CARD - WIDE, HORIZONTAL BALANCE, NO OVERLAP ===== */
 .login-wrapper {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 200;
-  width: 560px;
+  width: 860px;
+  max-width: 90vw;
   animation: levitate 0.8s cubic-bezier(0.16, 1, 0.3, 1.2) forwards;
 }
 
@@ -203,13 +204,14 @@ body {
 }
 
 .login-card {
-  background: rgba(255, 251, 240, 0.94);
+  background: rgba(255, 251, 240, 0.96);
   backdrop-filter: blur(32px);
-  border-radius: 64px;
+  border-radius: 56px;
   border: 1px solid rgba(229, 184, 60, 0.5);
-  box-shadow: 0 40px 80px rgba(10, 42, 56, 0.12), 0 0 0 1px rgba(229, 184, 60, 0.2) inset, 0 0 40px rgba(229, 184, 60, 0.1);
-  padding: 48px 48px 48px;
+  box-shadow: 0 40px 80px rgba(10, 42, 56, 0.15), 0 0 0 1px rgba(229, 184, 60, 0.2) inset, 0 0 40px rgba(229, 184, 60, 0.08);
+  padding: 40px 44px 44px;
   transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  position: relative;
 }
 
 .login-card:hover {
@@ -218,7 +220,7 @@ body {
 }
 
 .card-accent {
-  width: 80px;
+  width: 100px;
   height: 5px;
   background: linear-gradient(90deg, var(--et-gold), var(--et-teal), var(--et-gold));
   border-radius: 4px;
@@ -232,10 +234,27 @@ body {
   50% { background-position: 100% center; }
 }
 
+/* Two-column layout for balance */
+.card-split {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.card-left {
+  flex: 1.2;
+  min-width: 240px;
+}
+
+.card-right {
+  flex: 1;
+  min-width: 240px;
+}
+
 .welcome-title {
-  font-size: 2.2rem;
+  font-size: 2rem;
   font-weight: 800;
-  line-height: 1.2;
+  line-height: 1.25;
   margin-bottom: 10px;
   color: var(--et-primary);
 }
@@ -255,9 +274,9 @@ body {
 }
 
 .card-sub {
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   color: var(--et-mid);
-  margin-bottom: 32px;
+  margin-bottom: 24px;
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -280,7 +299,7 @@ body {
 .breaking-module {
   background: linear-gradient(115deg, rgba(229, 184, 60, 0.08), rgba(47, 155, 122, 0.05));
   border-radius: 40px;
-  padding: 20px 24px;
+  padding: 18px 22px;
   margin-bottom: 28px;
   border-left: 5px solid var(--et-gold);
   position: relative;
@@ -326,7 +345,7 @@ body {
   position: absolute;
   width: 100%;
   font-weight: 600;
-  font-size: 0.94rem;
+  font-size: 0.92rem;
   color: var(--et-dark);
   line-height: 1.45;
   transition: transform 0.5s cubic-bezier(0.2, 0.85, 0.4, 1), opacity 0.45s;
@@ -339,18 +358,18 @@ body {
   transform: translateY(0);
 }
 
-/* Market Dashboard - 3D Cards */
+/* Market Dashboard - 4 column, refined */
 .market-dashboard {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-bottom: 36px;
+  gap: 14px;
+  margin-bottom: 32px;
 }
 
 .market-tile {
   background: white;
-  border-radius: 32px;
-  padding: 16px 10px;
+  border-radius: 28px;
+  padding: 14px 8px;
   text-align: center;
   border: 1px solid rgba(229, 184, 60, 0.2);
   transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
@@ -382,7 +401,7 @@ body {
 }
 
 .tile-label {
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 800;
   text-transform: uppercase;
   color: var(--et-mid);
@@ -392,23 +411,23 @@ body {
 .tile-value {
   font-family: monospace;
   font-weight: 800;
-  font-size: 1.1rem;
-  margin-top: 8px;
+  font-size: 1rem;
+  margin-top: 6px;
   color: var(--et-primary);
 }
 
 .tile-change {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 700;
-  margin-top: 6px;
+  margin-top: 5px;
 }
 
 .tile-change.up { color: var(--et-teal); }
 .tile-change.down { color: #E67E22; }
 
-/* Input Fields - Neon Touch */
+/* Input Fields - refined spacing */
 .input-field {
-  margin-bottom: 22px;
+  margin-bottom: 20px;
   position: relative;
 }
 
@@ -417,8 +436,8 @@ body {
   background: #FFFFFF;
   border: 2px solid rgba(229, 184, 60, 0.2);
   border-radius: 56px;
-  padding: 20px 28px 10px 28px;
-  font-size: 1rem;
+  padding: 18px 26px 10px 26px;
+  font-size: 0.95rem;
   font-family: 'Plus Jakarta Sans', sans-serif;
   outline: none;
   transition: all 0.3s;
@@ -427,10 +446,10 @@ body {
 
 .input-field label {
   position: absolute;
-  left: 28px;
+  left: 26px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--et-mid);
   pointer-events: none;
   transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
@@ -439,14 +458,14 @@ body {
 
 .input-field input:focus {
   border-color: var(--et-gold);
-  box-shadow: 0 0 0 6px rgba(229, 184, 60, 0.15);
+  box-shadow: 0 0 0 6px rgba(229, 184, 60, 0.12);
   transform: scale(1.01);
 }
 
 .input-field input:focus ~ label,
 .input-field input:not(:placeholder-shown) ~ label {
   top: 12px;
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   color: var(--et-gold);
   font-weight: 800;
 }
@@ -458,17 +477,17 @@ body {
   background-size: 200% auto;
   border: none;
   border-radius: 56px;
-  padding: 18px;
+  padding: 16px;
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 800;
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: white;
   cursor: pointer;
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease;
   box-shadow: 0 12px 30px rgba(10, 42, 56, 0.4);
-  margin-top: 16px;
+  margin-top: 12px;
   animation: gradientFlow 3s infinite;
 }
 
@@ -497,9 +516,11 @@ body {
 .card-footer-links {
   display: flex;
   justify-content: space-between;
-  margin-top: 28px;
-  font-size: 0.78rem;
+  margin-top: 24px;
+  font-size: 0.75rem;
   font-weight: 600;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .card-footer-links a {
@@ -523,9 +544,9 @@ body {
 
 .alert-message {
   margin: 12px 0 20px;
-  padding: 14px 20px;
+  padding: 12px 18px;
   border-radius: 40px;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   font-weight: 600;
   display: none;
   backdrop-filter: blur(8px);
@@ -654,6 +675,15 @@ body {
 .music-icon {
   font-size: 1.2rem;
 }
+
+@media (max-width: 780px) {
+  .card-split { flex-direction: column; gap: 24px; }
+  .login-wrapper { width: 92vw; }
+  .login-card { padding: 32px 28px; }
+  .market-dashboard { gap: 8px; }
+  .market-tile { padding: 10px 4px; }
+  .ticker-label { padding: 0 20px; }
+}
 </style>
 </head>
 <body>
@@ -673,43 +703,51 @@ body {
   </div>
 </div>
 
+<!-- REDESIGNED LOGIN CARD: Horizontal balance, two-column, avoids square/vertical overlap -->
 <div class="login-wrapper">
   <div class="login-card">
     <div class="card-accent"></div>
-    <div class="welcome-title">NewsDesk <span class="ai-highlight">Neural</span><br>Cognitive Hub</div>
-    <div class="card-sub"><span>🤖 AI-Powered Market Cognition</span> <span class="ai-chip">GPT-6 • Real-time</span></div>
+    <div class="card-split">
+      <!-- Left Column: Title, breaking news, market dashboard -->
+      <div class="card-left">
+        <div class="welcome-title">NewsDesk <span class="ai-highlight">Neural</span><br>Cognitive Hub</div>
+        <div class="card-sub"><span>🤖 AI-Powered Market Cognition</span> <span class="ai-chip">GPT-6 • Real-time</span></div>
 
-    <div class="breaking-module">
-      <div class="breaking-header"><div class="live-dot"></div><span>🧠 NEURAL INSIGHT • BREAKING ALERT</span></div>
-      <div class="breaking-track" id="breakingTrack"></div>
-    </div>
+        <div class="breaking-module">
+          <div class="breaking-header"><div class="live-dot"></div><span>🧠 NEURAL INSIGHT • BREAKING ALERT</span></div>
+          <div class="breaking-track" id="breakingTrack"></div>
+        </div>
 
-    <div class="market-dashboard" id="marketDashboard">
-      <div class="market-tile"><div class="tile-label">NIFTY 50</div><div class="tile-value">25,842</div><div class="tile-change up">▲ 0.68%</div></div>
-      <div class="market-tile"><div class="tile-label">SENSEX</div><div class="tile-value">84,756</div><div class="tile-change up">▲ 0.73%</div></div>
-      <div class="market-tile"><div class="tile-label">GOLD</div><div class="tile-value">₹74,520</div><div class="tile-change down">▼ 0.09%</div></div>
-      <div class="market-tile"><div class="tile-label">BTC</div><div class="tile-value">$71,280</div><div class="tile-change up">▲ 3.2%</div></div>
-    </div>
+        <div class="market-dashboard" id="marketDashboard">
+          <div class="market-tile"><div class="tile-label">NIFTY 50</div><div class="tile-value">25,842</div><div class="tile-change up">▲ 0.68%</div></div>
+          <div class="market-tile"><div class="tile-label">SENSEX</div><div class="tile-value">84,756</div><div class="tile-change up">▲ 0.73%</div></div>
+          <div class="market-tile"><div class="tile-label">GOLD</div><div class="tile-value">₹74,520</div><div class="tile-change down">▼ 0.09%</div></div>
+          <div class="market-tile"><div class="tile-label">BTC</div><div class="tile-value">$71,280</div><div class="tile-change up">▲ 3.2%</div></div>
+        </div>
+      </div>
 
-    <div id="alertMessage" class="alert-message"></div>
+      <!-- Right Column: Login form, alerts, footer -->
+      <div class="card-right">
+        <div id="alertMessage" class="alert-message"></div>
+        <div class="input-field">
+          <input type="text" id="username" placeholder=" " autocomplete="username">
+          <label>Username / ET ID</label>
+        </div>
+        <div class="input-field">
+          <input type="password" id="password" placeholder=" " autocomplete="current-password">
+          <label>Password</label>
+        </div>
 
-    <div class="input-field">
-      <input type="text" id="username" placeholder=" " autocomplete="username">
-      <label>Username / ET ID</label>
-    </div>
-    <div class="input-field">
-      <input type="password" id="password" placeholder=" " autocomplete="current-password">
-      <label>Password</label>
-    </div>
+        <button class="login-btn" id="loginButton">
+          <span class="btn-ripple"></span>
+          <span id="btnText">🚀 Launch Neural Dashboard</span>
+        </button>
 
-    <button class="login-btn" id="loginButton">
-      <span class="btn-ripple"></span>
-      <span id="btnText">🚀 Launch Neural Dashboard</span>
-    </button>
-
-    <div class="card-footer-links">
-      <div>✨ New to NewsDesk? <a href="/auth/register">Create AI Account →</a></div>
-      <div class="ai-footer-badge">⚡ Neural Engine v4.2 • Quantum Ready</div>
+        <div class="card-footer-links">
+          <div>✨ New to NewsDesk? <a href="/auth/register">Create AI Account →</a></div>
+          <div class="ai-footer-badge">⚡ Neural Engine v4.2 • Quantum Ready</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

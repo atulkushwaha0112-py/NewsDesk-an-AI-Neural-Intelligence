@@ -1,0 +1,13 @@
+# Local environment variables
+.env
+.env.*
+!.env.example
+
+# Local application data
+admin/admin_data/*.json
+user_data/
+tracking/*.json
+
+# Python artifacts
+__pycache__/
+*.py[cod]

@@ -1,4 +1,8 @@
 import os
+import json
+from dotenv import load_dotenv
+
+load_dotenv()
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -26,12 +30,35 @@ app.include_router(tracking_router,   prefix="/tracking",    tags=["Tracking"])
 app.include_router(profile_router,    prefix="/profile",     tags=["Profile"])
 app.include_router(admin_router,      prefix="/admin",       tags=["Admin"])
 
-# Bootstrap default admin if none exist
+# Initialize the admin account only from deployment-provided credentials.
 from config import ADMIN_DATA_DIR
 from admin.utils.storage import create_admin
+from login.utils.auth_utils import hash_password
+
+os.makedirs(ADMIN_DATA_DIR, exist_ok=True)
+
+# Remove legacy admin records whose passwords were stored in plaintext.
+for filename in os.listdir(ADMIN_DATA_DIR):
+    if not filename.endswith(".json"):
+        continue
+    record_path = os.path.join(ADMIN_DATA_DIR, filename)
+    try:
+        with open(record_path, "r", encoding="utf-8") as record_file:
+            record = json.load(record_file)
+        stored_password = record.get("password_hash", "")
+        if not stored_password.startswith(("$2a$", "$2b$", "$2y$")):
+            os.remove(record_path)
+    except (OSError, json.JSONDecodeError):
+        continue
+
 if not any(f.endswith(".json") for f in os.listdir(ADMIN_DATA_DIR)):
-    create_admin("admin", "admin123")
-    print("Default admin created: 'admin' / 'admin123'")
+    admin_username = os.getenv("NEWS_DESK_ADMIN_USERNAME", "").strip()
+    admin_password = os.getenv("NEWS_DESK_ADMIN_PASSWORD", "")
+    if admin_username and admin_password:
+        create_admin(admin_username, hash_password(admin_password))
+        print("Admin account initialized from environment variables.")
+    else:
+        print("Admin account not initialized. Set NEWS_DESK_ADMIN_USERNAME and NEWS_DESK_ADMIN_PASSWORD.")
 
 # ── Routes ──────────────────────────────────────────────────────────────────
 

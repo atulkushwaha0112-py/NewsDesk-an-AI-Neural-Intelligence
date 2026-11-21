@@ -6,7 +6,9 @@ TRACKING_DIR  = os.path.join(BASE_DIR, "tracking")
 NEWS_DATA_DIR = os.path.join(BASE_DIR, "NEWS_DATA_ET")
 ADMIN_DATA_DIR = os.path.join(BASE_DIR, "admin", "admin_data")
 
-SECRET_KEY                  = "change-this-secret-in-production"
+SECRET_KEY = os.getenv("NEWS_DESK_SECRET_KEY", "").strip()
+if not SECRET_KEY:
+    raise RuntimeError("NEWS_DESK_SECRET_KEY must be configured in the environment.")
 ALGORITHM                   = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
 

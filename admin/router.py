@@ -37,7 +37,7 @@ async def admin_login_page(request: Request):
 @router.post("/login")
 async def admin_login(body: AdminLoginRequest, response: Response):
     admin = load_admin(body.username)
-    # Reusing the existing verify_password which is a plain text comparison currently
+    # Verify the stored password hash (legacy records are migrated during startup).
     if not admin or not verify_password(body.password, admin["password_hash"]):
         raise HTTPException(401, "Invalid admin username or password")
 

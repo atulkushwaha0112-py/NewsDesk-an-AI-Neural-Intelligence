@@ -75,11 +75,19 @@ This script runs continuously, fetching RSS feeds and scraping articles into the
 - Register a new account, set up your news preferences, and access your personalized dashboard.
 
 ### Admin Panel
-A default admin account is bootstrapped automatically upon the first application start.
-- **Admin Login**: Go to `http://localhost:8000/auth/login` and use the admin credentials.
-- **Default Username**: `admin`
-- **Default Password**: `admin123`
-*(Note: Be sure to change the admin credentials or `SECRET_KEY` in `config.py` for a production environment).*
+The admin account is created from environment variables; the repository does not contain a default admin password.
+
+1. Copy `.env.example` to `.env`.
+2. Set `NEWS_DESK_SECRET_KEY` to a unique random value.
+3. Set `NEWS_DESK_ADMIN_USERNAME` and `NEWS_DESK_ADMIN_PASSWORD` to your chosen admin credentials.
+4. Start the application and open `http://localhost:8000/admin/login`.
+
+Generate a signing key with:
+```bash
+python -c "import secrets; print(secrets.token_urlsafe(48))"
+```
+
+Use the same environment variables in your deployment provider. Never commit `.env` or real credentials. Admin passwords are stored using bcrypt.
 
 ## Project Structure
 - `main.py`: Main FastAPI application initialization and router configuration.
